@@ -2,6 +2,7 @@
 #define TRANSACTION_H
 
 #include <string>
+#include <memory>
 #include "../../Entity/Object.h."
 
 class Account;
@@ -15,11 +16,12 @@ protected:
 public:
     Transaction(const std::string& id, long long amount);
     virtual ~Transaction() = default;
+
 public:
     std::string info() override = 0;
     virtual void execute() = 0;
 
-    virtual Account* sourceAccount() = 0;
+    virtual std::shared_ptr<Account> sourceAccount() = 0;
     virtual long long amount() = 0;
 };
 
