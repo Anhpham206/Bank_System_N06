@@ -1,4 +1,6 @@
 #include "TransferTransaction.h"
+#include "../Notification/TransferNotification.h"
+#include "../Notification/Notification.h"
 #include <iostream>
 #include <sstream> 
 
@@ -6,31 +8,44 @@ TransferTransaction::TransferTransaction(const std::string& id, std::shared_ptr<
     : Transaction(id, amount), _sourceAccount(sourceAcc), _destinationAccount(destAcc) {}
 
 std::string TransferTransaction::info() {
-    // Khóa weak_ptr để sử dụng an toàn
-    if (auto sourceAcc = _sourceAccount.lock()) {
-        if (auto destAcc = _destinationAccount.lock()) {
-            std::stringstream ss;
-            ss << "Transfer | ID: " << _transactionID 
-               << " | Date: " << _date 
-               << " | Amount: " << _amount << " VND | From: " << "Source Acc..." 
-               << " | To: " << "Dest Acc...";
-            return ss.str();
-        }
+    auto src = _sourceAccount.lock();
+    auto dest = _destinationAccount.lock();
+    
+    std::stringstream ss;
+    ss << "Transfer    | ID: " << _transactionID 
+       << " | Date: " << _date 
+       << " | Amount: " << _amount << " VND";
+
+    if (src && dest) {
+        ss << " | From: " << src->AccountNumber() 
+           << " | To: " << dest->AccountNumber();
+    } else {
+        ss << " | Error: One or both accounts are unavailable.";
     }
-    return "Transfer | One or both accounts are no longer available.";
+    
+    return ss.str();
 }
 
 void TransferTransaction::execute() {
-    // Khóa weak_ptr để sử dụng an toàn
-    if (auto sourceAcc = _sourceAccount.lock()) {
-        if (auto destAcc = _destinationAccount.lock()) {
-            std::cout << "Executing Transfer: " << _amount << " VND from Source to Destination Account..." << std::endl;
-            // ... logic transfer: sourceAcc->withdraw(_amount); destAcc->deposit(_amount); ...
+    auto src = _sourceAccount.lock();
+    auto dest = _destinationAccount.lock();
+
+    if (src && dest) {
+        if (src->Balance() >= _amount) {
+            src->withdraw(_amount); // Trừ tiền nguồn
+            dest->deposit(_amount);  // Cộng tiền đích
+            std::cout << "Transaction " << _transactionID << ": Transferred " << _amount << " VND successfully." << std::endl;
+
+            auto transPtr = std::static_pointer_cast<Transaction>(shared_from_this());
+            auto notif = std::make_shared<TransferNotification>(transPtr);
+            
+            src->addNotification(notif); // Thông báo cho người gửi
+            dest->addNotification(notif); // Thông báo cho người nhận
         } else {
-            std::cerr << "Execution failed: Destination Account no longer exists." << std::endl;
+            std::cout << "Transaction " << _transactionID << ": Transfer failed (Insufficient balance)." << std::endl;
         }
     } else {
-        std::cerr << "Execution failed: Source Account no longer exists." << std::endl;
+        std::cerr << "Execution failed: One or both accounts are missing." << std::endl;
     }
 }
 

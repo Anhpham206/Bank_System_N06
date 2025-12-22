@@ -7,11 +7,9 @@ TransferNotification::TransferNotification(std::shared_ptr<Transaction> transact
 }
 
 std::string TransferNotification::makeMessage() {
-    // Truy cập dữ liệu qua _transaction (là shared_ptr)
     long long amount = _transaction ? _transaction->amount() : 0;
-    
     std::stringstream ss;
-    ss << "Giao dich chuyen tien tri gia " << amount << " VND da duoc thuc hien vao luc " << _time << ".";
+    ss << "A transfer of " << amount << " VND was processed.";
     return ss.str();
 }
 
@@ -20,5 +18,8 @@ std::string TransferNotification::message() {
 }
 
 std::string TransferNotification::info() {
-    return "Transfer Notification | Time: " + _time + " | Message: " + makeMessage();
+    std::stringstream ss;
+    ss << "Transfer Notification | Time: " << _time 
+       << " | Msg: " << makeMessage();
+    return ss.str();
 }

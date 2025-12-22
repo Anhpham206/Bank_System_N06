@@ -10,7 +10,7 @@ WithdrawNotification::WithdrawNotification(std::shared_ptr<Transaction> transact
 std::string WithdrawNotification::makeMessage() {
     long long amount = _transaction ? _transaction->amount() : 0;
     std::stringstream ss;
-    ss << "Giao dich rut tien " << amount << " VND da duoc thuc hien thanh cong vao luc " << _time << ".";
+    ss << "A withdrawal of " << amount << " VND was successful.";
     return ss.str();
 }
 
@@ -19,5 +19,8 @@ std::string WithdrawNotification::message() {
 }
 
 std::string WithdrawNotification::info() {
-    return "Withdrawal Notification | Time: " + _time + " | Message: " + makeMessage();
+    std::stringstream ss;
+    ss << "Withdrawal Notification | Time: " << _time 
+       << " | Msg: " << makeMessage();
+    return ss.str();
 }

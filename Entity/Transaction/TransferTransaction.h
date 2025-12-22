@@ -4,8 +4,6 @@
 #include "Transaction.h"
 #include <memory>
 
-class Account;
-
 class TransferTransaction : public Transaction {
 private:
     // Dùng weak_ptr cho tham chiếu không sở hữu đến Account

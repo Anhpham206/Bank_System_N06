@@ -1,34 +1,41 @@
 #include "Account.h"
-#include "Customer.h"
+#include "../Customer.h"
+#include "../Notification/Notification.h" // Cần include để nhận diện kiểu dữ liệu shared_ptr
 
 void Account::deposit(long long amount) {
-    return;
+    _balance += amount; // Cập nhật logic thực tế thay vì return trống
 }
 
 void Account::withdraw(long long amount) {
-    return;
+    if (_balance >= amount) {
+        _balance -= amount; // Cập nhật logic thực tế thay vì return trống
+    }
 }
 
 long long Account::Balance() {
-    return 0;
+    return _balance;
 }
 
 std::string Account::AccountNumber() {
-    return "";
+    return _accountNumber;
 }
 
-void Account::addNotification(Notification* notification) {
-    return;
+// [ĐÃ SỬA] Sử dụng std::shared_ptr<Notification>
+void Account::addNotification(std::shared_ptr<Notification> notification) {
+    if (notification) {
+        _notifications.push_back(notification);
+    }
 }
 
-std::vector<Notification*> Account::Notifications() {
-    return std::vector<Notification*>();
+// [ĐÃ SỬA] Trả về vector chứa shared_ptr
+std::vector<std::shared_ptr<Notification>> Account::Notifications() {
+    return _notifications;
 }
 
 bool Account::verifyPIN(std::string pin) {
-    return false;
+    return _PIN == pin;
 }
 
 std::string Account::info() {
-    return "";
+    return "Account No: " + _accountNumber + " | Balance: " + std::to_string(_balance);
 }

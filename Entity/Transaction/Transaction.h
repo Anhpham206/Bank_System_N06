@@ -4,10 +4,9 @@
 #include <string>
 #include <memory>
 #include "../Object.h."
+#include "../Account/Account.h"
 
-class Account;
-
-class Transaction : public Object {
+class Transaction : public Object , public std::enable_shared_from_this<Transaction>{
 protected:
     std::string _transactionID;
     std::string _date;

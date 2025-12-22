@@ -2,7 +2,6 @@
 #define TRANSFER_NOTIFICATION_H
 
 #include "Notification.h"
-#include <memory>
 
 class TransferNotification : public Notification {
 public:

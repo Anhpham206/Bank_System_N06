@@ -7,11 +7,9 @@ DepositNotification::DepositNotification(std::shared_ptr<Transaction> transactio
 }
 
 std::string DepositNotification::makeMessage() {
-    // Truy cập dữ liệu qua _transaction (là shared_ptr, truy cập bằng ->)
-    long long amount = _transaction ? _transaction->amount() : 0; //
-    
+    long long amount = _transaction ? _transaction->amount() : 0;
     std::stringstream ss;
-    ss << "Tai khoan cua quy khach da nhan duoc so tien " << amount << " VND vao luc " << _time << ".";
+    ss << "Your account has been credited with " << amount << " VND.";
     return ss.str();
 }
 
@@ -20,5 +18,8 @@ std::string DepositNotification::message() {
 }
 
 std::string DepositNotification::info() {
-    return "Deposit Notification [" + _time + "]";
+    std::stringstream ss;
+    ss << "Deposit Notification | Time: " << _time 
+       << " | Msg: " << makeMessage();
+    return ss.str();
 }

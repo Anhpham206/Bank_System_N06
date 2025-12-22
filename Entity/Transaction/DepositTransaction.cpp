@@ -1,4 +1,5 @@
 #include "DepositTransaction.h"
+#include "../Notification/DepositNotification.h"
 #include <iostream>
 #include <sstream> 
 
@@ -6,25 +7,27 @@ DepositTransaction::DepositTransaction(const std::string& id, std::shared_ptr<Ac
     : Transaction(id, amount), _account(acc) {}
 
 std::string DepositTransaction::info() {
-    // Khóa weak_ptr để sử dụng an toàn
     if (auto acc = _account.lock()) {
         std::stringstream ss;
-        ss << "Deposit | ID: " << _transactionID 
+        ss << "Deposit     | ID: " << _transactionID 
            << " | Date: " << _date 
-           << " | Amount: " << _amount << " VND | To: " << (acc ? "Account Number..." : "N/A"); 
-           
+           << " | Amount: " << _amount << " VND"
+           << " | To Account: " << acc->AccountNumber(); 
         return ss.str();
     }
-    return "Deposit | Account is no longer available.";
+    return "Deposit     | ID: " + _transactionID + " | Error: Target Account no longer available.";
 }
 
 void DepositTransaction::execute() {
-    // Khóa weak_ptr để sử dụng an toàn
     if (auto acc = _account.lock()) {
-        std::cout << "Executing Deposit: " << _amount << " VND to Account " << (acc ? "..." : "N/A") << std::endl;
-        // ... logic deposit: acc->deposit(_amount); ...
+        acc->deposit(_amount); 
+        std::cout << "Transaction " << _transactionID << ": Successfully deposited " << _amount << " VND." << std::endl;
+
+        // Sử dụng shared_from_this() để truyền chính giao dịch này vào thông báo
+        auto notif = std::make_shared<DepositNotification>(std::static_pointer_cast<Transaction>(shared_from_this()));
+        acc->addNotification(notif);
     } else {
-        std::cerr << "Execution failed: Target Account no longer exists." << std::endl;
+        std::cerr << "Execution failed: Account no longer exists." << std::endl;
     }
 }
 
