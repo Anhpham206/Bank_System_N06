@@ -9,7 +9,8 @@
 class Customer;
 class Notification; // Forward declaration
 
-class Account : public Object {
+class Account : public Object
+{
 private:
     std::string _accountNumber;
     long long _balance;

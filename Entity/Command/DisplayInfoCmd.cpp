@@ -8,5 +8,5 @@ DisplayInfoCmd::DisplayInfoCmd(std::shared_ptr<Object> object)
 }
 void DisplayInfoCmd::execute()
 {
-    std::cout << _object->info();
+    std::cout << _object->info() << "\n";
 }

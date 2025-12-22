@@ -2,10 +2,9 @@
 #define _DEPOSIT_CMD_H_
 
 #include "ICommand.h"
+#include "../Transaction/DepositTransaction.h"
 
 #include <memory>
-
-class DepositTransaction;
 
 class DepositCmd : public ICommand
 {

@@ -4,7 +4,8 @@ TransferCmd::TransferCmd(std::shared_ptr<TransferTransaction> transaction)
 {
     _transaction = transaction;
 }
-void execute()
+void TransferCmd::execute()
 {
+    _transaction->execute();
     return;
 }

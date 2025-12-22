@@ -2,10 +2,9 @@
 #define _TRANSFER_CMD_H_
 
 #include "ICommand.h"
+#include "../Transaction/TransferTransaction.h"
 
 #include <memory>
-
-class TransferTransaction;
 
 class TransferCmd : public ICommand
 {

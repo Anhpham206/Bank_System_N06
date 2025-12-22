@@ -3,7 +3,8 @@
 
 #include "Notification.h"
 
-class WithdrawNotification : public Notification {
+class WithdrawNotification : public Notification
+{
 public:
     WithdrawNotification(std::shared_ptr<Transaction> transaction);
 

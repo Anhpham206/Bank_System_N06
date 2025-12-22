@@ -2,15 +2,14 @@
 #define _BANK_SYSTEM_H_
 
 #include "../Object.h"
+#include "../Account/Account.h"
+#include "../Customer/Customer.h"
 
 #include <map>
 #include <memory>
 
 using std::map;
 using std::shared_ptr;
-
-class Customer;
-class Account;
 
 class BankSystem : public Object
 {
