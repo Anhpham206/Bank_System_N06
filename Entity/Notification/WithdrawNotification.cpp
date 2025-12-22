@@ -8,9 +8,7 @@ WithdrawNotification::WithdrawNotification(std::shared_ptr<Transaction> transact
 }
 
 std::string WithdrawNotification::makeMessage() {
-    // Truy cập dữ liệu qua _transaction (là shared_ptr)
     long long amount = _transaction ? _transaction->amount() : 0;
-    
     std::stringstream ss;
     ss << "Giao dich rut tien " << amount << " VND da duoc thuc hien thanh cong vao luc " << _time << ".";
     return ss.str();

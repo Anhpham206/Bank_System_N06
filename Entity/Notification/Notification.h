@@ -2,7 +2,7 @@
 #define NOTIFICATION_H
 
 #include "../Object.h"
-#include "../../Business/Transaction/Transaction.h"
+#include "../Transaction/Transaction.h"
 #include <string>
 #include <memory>
 

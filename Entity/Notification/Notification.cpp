@@ -1,15 +1,18 @@
 #include "Notification.h"
 #include <iostream>
+#include <ctime>
 
-Notification::Notification(std::shared_ptr<Transaction> transaction) //
+Notification::Notification(std::shared_ptr<Transaction> transaction)
     : _transaction(transaction) {
-    this->_time = "YYYY-MM-DD HH:MM:SS"; 
+    time_t now = time(0);
+    char* dt = ctime(&now);
+    this->_time = std::string(dt);
+    if (!this->_time.empty() && this->_time.back() == '\n') _time.pop_back();
 }
 
 void Notification::displayInfo() {
-    // Gọi phương thức message() đa hình để lấy nội dung
-    std::cout << "--- NOTIFICATION ---" << std::endl;
-    std::cout << "Time: " << _time << std::endl;
-    std::cout << "Message: " << message() << std::endl;
-    std::cout << "--------------------" << std::endl;
+    std::cout << "========= THÔNG BÁO =========" << std::endl;
+    std::cout << "Thời gian: " << _time << std::endl;
+    std::cout << "Nội dung: " << message() << std::endl;
+    std::cout << "=============================" << std::endl;
 }

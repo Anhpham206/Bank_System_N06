@@ -20,5 +20,5 @@ std::string DepositNotification::message() {
 }
 
 std::string DepositNotification::info() {
-    return "Deposit Notification | Time: " + _time;
+    return "Deposit Notification [" + _time + "]";
 }
