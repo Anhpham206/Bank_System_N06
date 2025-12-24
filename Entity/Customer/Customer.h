@@ -1,5 +1,5 @@
-#ifndef CUSTOMER_H
-#define CUSTOMER_H
+#ifndef _CUSTOMER_H_
+#define _CUSTOMER_H_
 
 #include "Object.h"
 #include <string>
