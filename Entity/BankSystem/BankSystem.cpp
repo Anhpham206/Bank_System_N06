@@ -3,7 +3,11 @@
 #include <iostream>
 
 using std::cout;
+using std::string;
 
+string BankSystem::info() {
+    return "Bank System info: do something...";
+}
 void BankSystem::addCustomer(string username, shared_ptr<Customer> customer)
 {
     _customers[username] = customer;
