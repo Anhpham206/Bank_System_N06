@@ -10,6 +10,7 @@
 
 using std::map;
 using std::shared_ptr;
+using std::string;
 
 class BankSystem : public Object
 {
@@ -29,6 +30,7 @@ public:
     bool login(string username, string pass);
     void logout();
     shared_ptr<Account> getAccount(string accountNumber);
+    string info() override;
 };
 
 #endif
