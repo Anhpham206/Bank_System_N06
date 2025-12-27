@@ -2,9 +2,13 @@
 #define _IPARSABLE_H_
 
 #include "../Entity/Object.h"
+#include <string>
+using std::string;
 
 class IParsable {
-//do something
+public:
+    virtual Object* parse(string data) = 0;
+    virtual ~IParsable() = default;
 };
 
 #endif
