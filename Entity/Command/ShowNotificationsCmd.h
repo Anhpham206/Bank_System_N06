@@ -4,9 +4,10 @@
 #include "ICommand.h"
 #include "../Account/Account.h"
 
+
 #include <memory>
 
-class Account;
+
 
 class ShowNotificationsCmd : public ICommand
 {

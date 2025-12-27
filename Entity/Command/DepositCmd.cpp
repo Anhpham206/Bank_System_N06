@@ -6,4 +6,6 @@ DepositCmd::DepositCmd(std::shared_ptr<DepositTransaction> transaction)
 }
 void DepositCmd::execute()
 {
+    _transaction->execute();
+    return;
 }

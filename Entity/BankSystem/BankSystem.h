@@ -19,6 +19,9 @@ private:
     shared_ptr<Customer> _currentCustomer;
 
 public:
+    BankSystem() {};
+
+public:
     void addCustomer(string username, shared_ptr<Customer> customer);
     void addAccount(shared_ptr<Account> account);
     void removeAccount(string accountNumber);
