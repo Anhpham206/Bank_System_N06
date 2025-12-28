@@ -2,9 +2,10 @@
 #define _CUSTOMERPARSER_H_
 
 #include "../IParsable.h"
-class CustomerParser : public IParsable {
+class CustomerParser : public IParsable
+{
 public:
-    Object* parse(string data) override;
+    shared_ptr<Object> parse(string data) override;
 };
 
 #endif

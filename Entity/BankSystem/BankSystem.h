@@ -31,6 +31,7 @@ public:
     bool login(string username, string pass);
     void logout();
     shared_ptr<Account> getAccount(string accountNumber);
+    shared_ptr<Customer> currentCustomer();
     string info() override;
 };
 

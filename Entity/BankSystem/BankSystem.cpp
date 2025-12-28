@@ -50,7 +50,7 @@ void BankSystem::run()
         std::ifstream fin("../../Data/Customers/" + name + ".txt");
         IParsable *parser = factory.create("Customer");
         getline(fin, line);
-        shared_ptr<Customer> customer(dynamic_cast<Customer *>(parser->parse(line)));
+        shared_ptr<Customer> customer = std::dynamic_pointer_cast<Customer>(parser->parse(line));
         _customers[customer->username()] = customer;
         fin.close();
         delete parser;
@@ -70,11 +70,16 @@ void BankSystem::run()
         getline(fin, line);
         IParsable *parser = factory.create(line);
         getline(fin, line);
-        shared_ptr<Account> account(dynamic_cast<Account *>(parser->parse(line)));
+        shared_ptr<Account> account = std::dynamic_pointer_cast<Account>(parser->parse(line));
         _accounts[account->AccountNumber()] = account;
         fin.close();
         delete parser;
     }
+}
+
+shared_ptr<Customer> BankSystem::currentCustomer()
+{
+    return _currentCustomer;
 }
 
 bool BankSystem::login(string username, string pass)

@@ -6,7 +6,6 @@
 #include "Entity/Transaction/WithdrawTransaction.h"
 #include "Entity/Transaction/TransferTransaction.h"
 #include "Entity/Notification/Notification.h"
-#include "UI/ConsoleUtils.h"
 
 // Giả sử bạn đã có một lớp ConcreteAccount thực thi từ Account
 class ConcreteAccount : public Account
@@ -26,7 +25,6 @@ int main()
     auto accountA = std::make_shared<ConcreteAccount>("ACC001", 5000000); // 5 triệu VND
     auto accountB = std::make_shared<ConcreteAccount>("ACC002", 1000000); // 1 triệu VND
 
-    UI::ConsoleUtils::goToXY(8, 1);
     std::cout << "--- STARTING BANK TRANSACTION TEST ---" << std::endl;
 
     // 2. Test Giao dịch nạp tiền (Deposit)
@@ -42,7 +40,7 @@ int main()
     transTransaction->execute(); //
 
     // 5. Kiểm tra kết quả Thông báo (Notification)
-    UI::ConsoleUtils::goToXY(8, 1);
+
     std::cout << "\n--- CHECKING NOTIFICATIONS FOR ACCOUNT A ---" << std::endl;
     auto notifications = accountA->Notifications(); //
 

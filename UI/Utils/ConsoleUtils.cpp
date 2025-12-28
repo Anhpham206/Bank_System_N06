@@ -34,7 +34,7 @@ void UI::ConsoleUtils::goUp()
 {
     int x = getWhereX();
     int y = getWhereY();
-    y -= 1;
+    y -= 2;
     goToXY(x, y);
 }
 
@@ -42,6 +42,6 @@ void UI::ConsoleUtils::goDown()
 {
     int x = getWhereX();
     int y = getWhereY();
-    y += 1;
+    y += 2;
     goToXY(x, y);
 }
