@@ -33,6 +33,8 @@ public:
     std::string info() override;
 
     std::string username();
+
+    void saveToFile(); // Hàm lưu thông tin khách hàng ra file
 };
 
 #endif
