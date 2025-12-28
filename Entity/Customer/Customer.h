@@ -23,6 +23,7 @@ private:
     // dung vector string chua accountNumber, lay ra Account thong qua ham getAccount tu BankSystem hien tai
 
 public:
+    Customer(); // Hàm tạo không tham số
     Customer(std::string id, std::string name, std::string user, std::string pass, std::string phone, std::string address);
     std::string getCustomerId();
     std::string getName();
@@ -33,6 +34,8 @@ public:
     std::string info() override;
 
     std::string username();
+
+    void saveToFile(); // Hàm lưu thông tin khách hàng ra file
 };
 
 #endif
