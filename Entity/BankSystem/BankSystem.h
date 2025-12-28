@@ -15,6 +15,7 @@ using std::string;
 class BankSystem : public Object
 {
 private:
+    string _name;
     map<string, shared_ptr<Customer>> _customers;
     map<string, shared_ptr<Account>> _accounts;
     shared_ptr<Customer> _currentCustomer;
@@ -23,7 +24,7 @@ public:
     BankSystem() {};
 
 public:
-    void addCustomer(string username, shared_ptr<Customer> customer);
+    void addCustomer(shared_ptr<Customer> customer);
     void addAccount(shared_ptr<Account> account);
     void removeAccount(string accountNumber);
     void run();

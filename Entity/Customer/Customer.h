@@ -2,6 +2,7 @@
 #define _CUSTOMER_H_
 
 #include "../Object.h"
+#include "../BankSystem/BankSystem.h"
 #include <string>
 #include <vector>
 
@@ -16,17 +17,22 @@ private:
     std::string _password;
     std::string _phoneNumber;
     std::string _address;
-    std::vector<Account *> _ownedAccount;
+    // std::vector<Account *> _ownedAccount;
+
+    std::vector<string> _ownedAccount;
+    // dung vector string chua accountNumber, lay ra Account thong qua ham getAccount tu BankSystem hien tai
 
 public:
     Customer(std::string id, std::string name, std::string user, std::string pass, std::string phone, std::string address);
     std::string getCustomerId();
     std::string getName();
     bool verifyPassword(std::string pass);
-    void addAccount(Account *acct);
-    void removeAccount(std::string acctNum);
-    Account *getAccount(std::string acctNum);
+    void addAccount(shared_ptr<Account> acct, shared_ptr<BankSystem> bankSystem); // them Account vao co so du lieu cua BankSystem nua
+    void removeAccount(std::string acctNum, shared_ptr<BankSystem> bankSystem);
+    shared_ptr<Account> getAccount(std::string acctNum, shared_ptr<BankSystem> bankSystem);
     std::string info() override;
+
+    std::string username();
 };
 
 #endif

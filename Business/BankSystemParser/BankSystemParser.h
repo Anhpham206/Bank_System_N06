@@ -2,9 +2,10 @@
 #define _BANKSYSTEMPARSER_H_
 
 #include "../IParsable.h"
-class BankSystemParser : public IParsable {
+class BankSystemParser : public IParsable
+{
 public:
-    Object* parse(string data) override;
+    shared_ptr<Object> parse(string data) override;
 };
 
 #endif

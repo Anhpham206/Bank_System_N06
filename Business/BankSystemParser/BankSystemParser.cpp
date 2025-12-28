@@ -1,6 +1,7 @@
 #include "BankSystemParser.h"
 #include "../../Entity/BankSystem/BankSystem.h"
 
-Object* BankSystemParser::parse(string data) {
-    return new BankSystem();
+shared_ptr<Object> BankSystemParser::parse(string data)
+{
+    return make_shared<BankSystem>(data);
 }

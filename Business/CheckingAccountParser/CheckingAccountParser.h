@@ -2,9 +2,10 @@
 #define _CHECKINGACCOUNTPARSER_H_
 
 #include "../IParsable.h"
-class CheckingAccountParser : public IParsable {
+class CheckingAccountParser : public IParsable
+{
 public:
-    Object* parse(string data) override;
+    shared_ptr<Object> parse(string data) override;
 };
 
 #endif

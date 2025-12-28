@@ -1,27 +1,81 @@
 #include "BankSystem.h"
+#include "../Business/ParserFactory/ParserFactory.h"
+#include "../Business/CheckingAccountParser/CheckingAccountParser.h"
+#include "../Business/SavingAccountParser/SavingAccountParser.h"
 
 #include <iostream>
+#include <fstream>
+#include <vector>
 
 using std::cout;
 using std::string;
+using std::vector;
 
 string BankSystem::info()
 {
     return "Bank System info: do something...";
 }
-void BankSystem::addCustomer(string username, shared_ptr<Customer> customer)
+
+void BankSystem::addCustomer(shared_ptr<Customer> customer)
 {
-    _customers[username] = customer;
+    _customers[customer->username()] = customer;
 }
+
 void BankSystem::addAccount(shared_ptr<Account> account)
 {
     _accounts[account->AccountNumber()] = account;
 }
+
 void BankSystem::removeAccount(string accountNumber)
 {
     _accounts.erase(accountNumber);
 }
-void run();
+
+void BankSystem::run()
+{
+    // doc danh sach tai khoan
+    std::ifstream fcustomers("../../Data/Customers/Customers.txt");
+    string line;
+    vector<string> customers;
+    while (getline(fcustomers, line))
+    {
+        customers.push_back(line);
+    }
+    fcustomers.close();
+
+    ParserFactory factory;
+    // doc tai khoan
+    for (string name : customers)
+    {
+        std::ifstream fin("../../Data/Customers/" + name + ".txt");
+        IParsable *parser = factory.create("Customer");
+        getline(fin, line);
+        shared_ptr<Customer> customer(dynamic_cast<Customer *>(parser->parse(line)));
+        _customers[customer->username()] = customer;
+        fin.close();
+        delete parser;
+    }
+
+    // doc danh sach account
+    std::ifstream fAccounts("../../Data/Accounts/Accounts.txt");
+    vector<string> accounts;
+    while (getline(fAccounts, line))
+    {
+        accounts.push_back(line);
+    }
+    // doc account
+    for (string name : accounts)
+    {
+        std::ifstream fin("../../Data/Accounts/" + name + ".txt");
+        getline(fin, line);
+        IParsable *parser = factory.create(line);
+        getline(fin, line);
+        shared_ptr<Account> account(dynamic_cast<Account *>(parser->parse(line)));
+        _accounts[account->AccountNumber()] = account;
+        fin.close();
+        delete parser;
+    }
+}
 
 bool BankSystem::login(string username, string pass)
 {
