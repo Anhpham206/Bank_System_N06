@@ -3,9 +3,10 @@
 
 #include "Account.h"
 
-class CheckingAccount : public Account {
+class CheckingAccount : public Account
+{
 public:
-    CheckingAccount(std::string accountNumber, Customer* owner);
+    CheckingAccount(std::string accountNumber, string owner, long long balance, string PIN);
     std::string info() override;
     void loadFromFile(std::string numberAccount) override;
 };

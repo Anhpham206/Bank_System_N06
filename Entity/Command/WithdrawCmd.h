@@ -2,11 +2,10 @@
 #define _WITHDRAW_CMD_H_
 
 #include "ICommand.h"
-#include "../Transaction/WithdrawTransaction.h"
+
+class WithdrawTransaction;
 
 #include <memory>
-
-
 
 class WithdrawCmd : public ICommand
 {

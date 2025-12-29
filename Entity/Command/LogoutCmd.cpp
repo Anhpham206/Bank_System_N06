@@ -1,11 +1,11 @@
 #include "LogoutCmd.h"
+#include "../../Business/AppContext.h"
 
-LogoutCmd::LogoutCmd(std::shared_ptr<BankSystem> bankSystem)
+LogoutCmd::LogoutCmd()
 {
-    _bankSystem = bankSystem;
 }
 void LogoutCmd::execute()
 {
-    _bankSystem->logout();
+    AppContext::getInstance().getBankSystem()->logout();
     return;
 }

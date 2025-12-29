@@ -1,6 +1,7 @@
 #include "Customer.h"
 #include "../Account/Account.h"
 #include "../BankSystem/BankSystem.h"
+#include "../../Business/AppContext.h"
 #include <algorithm>
 
 #include <iostream>
@@ -41,30 +42,28 @@ bool Customer::verifyPassword(std::string pass)
     return _password == pass;
 }
 
-void Customer::addAccount(std::shared_ptr<Account> acct, std::shared_ptr<BankSystem> bankSystem)
+void Customer::addAccount(std::shared_ptr<Account> acct)
 {
-    if (acct && bankSystem)
-    {
-        _ownedAccountIds.push_back(acct->AccountNumber());
 
-        bankSystem->addAccount(acct);
+    _ownedAccount.push_back(acct->accountNumber());
+
+    AppContext::getInstance().getBankSystem()->addAccount(acct);
+}
+
+void Customer::removeAccount(std::string acctNum)
+{
+    auto it = std::remove(_ownedAccount.begin(), _ownedAccount.end(), acctNum);
+
+    if (it != _ownedAccount.end())
+    {
+        _ownedAccount.erase(it, _ownedAccount.end());
     }
 }
 
-void Customer::removeAccount(std::string acctNum, std::shared_ptr<BankSystem> bankSystem)
-{
-    auto it = std::remove(_ownedAccountIds.begin(), _ownedAccountIds.end(), acctNum);
-
-    if (it != _ownedAccountIds.end())
-    {
-        _ownedAccountIds.erase(it, _ownedAccountIds.end());
-    }
-}
-
-std::shared_ptr<Account> Customer::getAccount(std::string acctNum, std::shared_ptr<BankSystem> bankSystem)
+std::shared_ptr<Account> Customer::getAccount(std::string acctNum)
 {
     bool isOwned = false;
-    for (const std::string &id : _ownedAccountIds)
+    for (const std::string &id : _ownedAccount)
     {
         if (id == acctNum)
         {
@@ -73,11 +72,10 @@ std::shared_ptr<Account> Customer::getAccount(std::string acctNum, std::shared_p
         }
     }
 
-    if (isOwned && bankSystem)
+    if (isOwned)
     {
-        return bankSystem->getAccount(acctNum);
+        return AppContext::getInstance().getBankSystem()->getAccount(acctNum);
     }
-
     return nullptr;
 }
 
@@ -106,8 +104,8 @@ void Customer::saveToFile()
         outFile << _phoneNumber << "\n";
         outFile << _address << "\n";
 
-        outFile << _ownedAccountIds.size() << "\n";
-        for (const std::string &accId : _ownedAccountIds)
+        outFile << _ownedAccount.size() << "\n";
+        for (const std::string &accId : _ownedAccount)
         {
             outFile << accId << "\n";
         }
@@ -119,4 +117,9 @@ void Customer::saveToFile()
     {
         std::cerr << "Lỗi: Không thể lưu khách hàng vào file " << filename << "\n";
     }
+}
+
+void Customer::loadAccountNumber(string accountNumber)
+{
+    _ownedAccount.push_back(accountNumber);
 }

@@ -2,12 +2,10 @@
 #define _SHOW_NOTIFICATIONS_CMD_H_
 
 #include "ICommand.h"
-#include "../Account/Account.h"
-
 
 #include <memory>
 
-
+class Account;
 
 class ShowNotificationsCmd : public ICommand
 {

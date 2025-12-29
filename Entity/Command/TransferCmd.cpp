@@ -1,4 +1,5 @@
 #include "TransferCmd.h"
+#include "../Transaction/TransferTransaction.h"
 
 TransferCmd::TransferCmd(std::shared_ptr<TransferTransaction> transaction)
 {

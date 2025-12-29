@@ -1,5 +1,6 @@
 #include "ShowNotificationsCmd.h"
 #include "../Notification/Notification.h"
+#include "../Account/Account.h"
 
 #include <vector>
 #include <iostream>
@@ -12,10 +13,10 @@ ShowNotificationsCmd::ShowNotificationsCmd(std::shared_ptr<Account> account)
 }
 void ShowNotificationsCmd::execute()
 {
-    vector<std::shared_ptr<Notification>> list = _account->notifications();
-    for (std::shared_ptr<Notification> notification : list)
+    vector<string> list = _account->notifications();
+    for (string notification : list)
     {
-        std::cout << notification->message() << "\n";
+        std::cout << notification << "\n";
     }
     return;
 }

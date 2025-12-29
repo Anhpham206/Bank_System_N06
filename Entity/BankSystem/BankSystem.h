@@ -2,11 +2,12 @@
 #define _BANK_SYSTEM_H_
 
 #include "../Object.h"
-#include "../Account/Account.h"
-#include "../Customer/Customer.h"
 
 #include <map>
 #include <memory>
+
+class Account;
+class Customer;
 
 using std::map;
 using std::shared_ptr;
@@ -22,6 +23,7 @@ private:
 
 public:
     BankSystem() {};
+    BankSystem(string name);
 
 public:
     void addCustomer(shared_ptr<Customer> customer);

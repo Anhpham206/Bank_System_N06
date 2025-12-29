@@ -6,22 +6,24 @@
 #include "../Object.h."
 #include "../Account/Account.h"
 
-class Transaction : public Object , public std::enable_shared_from_this<Transaction>{
+using std::shared_ptr;
+
+class Transaction : public Object, public std::enable_shared_from_this<Transaction>
+{
 protected:
-    std::string _transactionID;
-    std::string _date;
+    std::shared_ptr<Account> _srcAccount;
     long long _amount;
 
 public:
-    Transaction(const std::string& id, long long amount);
+    Transaction(shared_ptr<Account> srcAccount, long long amount);
     virtual ~Transaction() = default;
 
 public:
-    std::string info() override = 0;
+    virtual std::string info() = 0;
     virtual void execute() = 0;
 
-    virtual std::shared_ptr<Account> sourceAccount() = 0;
-    virtual long long amount() = 0;
+    shared_ptr<Account> sourceAccount();
+    long long amount();
 };
 
 #endif

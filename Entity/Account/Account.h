@@ -11,34 +11,31 @@ class Notification; // Forward declaration
 
 class Account : public Object
 {
-protected: // [ĐÃ SỬA] Để class con (Saving và Checking) có thể thay đổi dữ liệu 
+protected: // [ĐÃ SỬA] Để class con (Saving và Checking) có thể thay đổi dữ liệu
     std::string _accountNumber;
     long long _balance;
-    Customer* _owner;
+    string _owner;
     // [ĐÃ SỬA] Dùng shared_ptr để quản lý danh sách thông báo
-    std::vector<std::shared_ptr<Notification>> _notifications; 
+    std::vector<string> _notifications;
     std::string _PIN;
 
 public:
     // [ĐÃ THÊM] Constructor để class con gọi
-    Account(std::string accountNumber, Customer* owner, long long balance = 0);
+    Account(std::string accountNumber, string owner, long long balance, string PIN);
 
     virtual ~Account() = default; // Nên có destructor ảo
 
     void deposit(long long amount);
     void withdraw(long long amount);
-    long long Balance();
-    std::string AccountNumber();
+    long long balance();
+    std::string accountNumber();
 
-    // [ĐÃ SỬA] Nhận vào shared_ptr
-    void addNotification(std::shared_ptr<Notification> notification);
-    
-    // [ĐÃ SỬA] Trả về vector chứa shared_ptr
-    std::vector<std::shared_ptr<Notification>> Notifications();
-    
+    void addNotification(string notification);
+
+    std::vector<string> notifications();
+
     bool verifyPIN(std::string pin);
-    void setPIN(std::string pin); // Hàm phụ trợ nếu cần thiết lập PIN
-    
+
     virtual void loadFromFile(std::string numberAccount) = 0;
     std::string info() override;
 };

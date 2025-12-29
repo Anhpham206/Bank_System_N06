@@ -3,6 +3,9 @@
 #include "../Business/CheckingAccountParser/CheckingAccountParser.h"
 #include "../Business/SavingAccountParser/SavingAccountParser.h"
 
+#include "../Account/Account.h"
+#include "../Customer/Customer.h"
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -13,7 +16,12 @@ using std::vector;
 
 string BankSystem::info()
 {
-    return "Bank System info: do something...";
+    return "Bank: " + _name;
+}
+
+BankSystem::BankSystem(string name)
+{
+    _name = name;
 }
 
 void BankSystem::addCustomer(shared_ptr<Customer> customer)
@@ -23,7 +31,7 @@ void BankSystem::addCustomer(shared_ptr<Customer> customer)
 
 void BankSystem::addAccount(shared_ptr<Account> account)
 {
-    _accounts[account->AccountNumber()] = account;
+    _accounts[account->accountNumber()] = account;
 }
 
 void BankSystem::removeAccount(string accountNumber)
@@ -51,6 +59,10 @@ void BankSystem::run()
         IParsable *parser = factory.create("Customer");
         getline(fin, line);
         shared_ptr<Customer> customer = std::dynamic_pointer_cast<Customer>(parser->parse(line));
+        while (getline(fin, line))
+        {
+            customer->loadAccountNumber(line);
+        }
         _customers[customer->username()] = customer;
         fin.close();
         delete parser;
@@ -63,6 +75,7 @@ void BankSystem::run()
     {
         accounts.push_back(line);
     }
+    fAccounts.close();
     // doc account
     for (string name : accounts)
     {
@@ -71,7 +84,8 @@ void BankSystem::run()
         IParsable *parser = factory.create(line);
         getline(fin, line);
         shared_ptr<Account> account = std::dynamic_pointer_cast<Account>(parser->parse(line));
-        _accounts[account->AccountNumber()] = account;
+
+        _accounts[account->accountNumber()] = account;
         fin.close();
         delete parser;
     }

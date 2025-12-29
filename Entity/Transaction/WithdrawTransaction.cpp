@@ -3,42 +3,36 @@
 #include "../Notification/Notification.h"
 #include <iostream>
 #include <sstream>
+#include <format>
 
-WithdrawTransaction::WithdrawTransaction(const std::string& id, std::shared_ptr<Account> acc, long long amount)
-    : Transaction(id, amount), _account(acc) {}
-
-std::string WithdrawTransaction::info() {
-    if (auto acc = _account.lock()) {
-        std::stringstream ss;
-        ss << "Withdraw    | ID: " << _transactionID 
-           << " | Date: " << _date 
-           << " | Amount: " << _amount << " VND"
-           << " | From Account: " << acc->AccountNumber();
-        return ss.str();
-    }
-    return "Withdraw    | ID: " + _transactionID + " | Error: Source Account no longer available.";
+WithdrawTransaction::WithdrawTransaction(std::shared_ptr<Account> acc, long long amount, string PIN)
+    : Transaction(acc, amount)
+{
+    _PIN = PIN;
 }
 
-void WithdrawTransaction::execute() {
-    if (auto acc = _account.lock()) {
-        if (acc->Balance() >= _amount) {
-            acc->withdraw(_amount);
-            std::cout << "Transaction " << _transactionID << ": Successfully withdrew " << _amount << " VND." << std::endl;
+std::string WithdrawTransaction::info()
+{
+    std::stringstream ss;
+    ss << std::format("Loai giao dich: Rut tien\nLuong tien gia dich:{0}", _amount);
+    return ss.str();
+}
 
-            auto notif = std::make_shared<WithdrawNotification>(std::static_pointer_cast<Transaction>(shared_from_this()));
-            acc->addNotification(notif); 
-        } else {
-            std::cout << "Transaction " << _transactionID << ": Failed. Insufficient funds." << std::endl;
+void WithdrawTransaction::execute()
+{
+    if (_srcAccount->verifyPIN(_PIN))
+    {
+        if (_srcAccount->balance() >= _amount)
+        {
+            _srcAccount->withdraw(_amount);
         }
-    } else {
-        std::cerr << "Execution failed: Account no longer exists." << std::endl;
+        else
+        {
+            std::cout << "Tai khoan hien khong du de thuc hien giao dich!";
+        }
     }
-}
-
-std::shared_ptr<Account> WithdrawTransaction::sourceAccount() {
-    return _account.lock(); 
-}
-
-long long WithdrawTransaction::amount() {
-    return _amount;
+    else
+    {
+        std::cout << "Sai ma xac nhan!";
+    }
 }

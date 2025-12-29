@@ -4,20 +4,17 @@
 #include "Transaction.h"
 #include <memory>
 
-class WithdrawTransaction : public Transaction {
+class WithdrawTransaction : public Transaction
+{
 private:
-    // Dùng weak_ptr cho tham chiếu không sở hữu đến Account
-    std::weak_ptr<Account> _account;
+    string _PIN;
 
 public:
-    WithdrawTransaction(const std::string& id, std::shared_ptr<Account> acc, long long amount);
+    WithdrawTransaction(std::shared_ptr<Account> acc, long long amount, string PIN);
 
 public:
     std::string info() override;
-    void execute() override; 
-
-    std::shared_ptr<Account> sourceAccount() override;
-    long long amount() override;
+    void execute() override;
 };
 
 #endif

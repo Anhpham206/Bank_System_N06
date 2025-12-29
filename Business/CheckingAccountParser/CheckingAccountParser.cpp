@@ -13,8 +13,7 @@ shared_ptr<Object> CheckingAccountParser::parse(string data)
     if (v.size() >= 1)
     {
         string accNum = v[0];
-        // Constructor: CheckingAccount(accNum, Customer* owner)
-        return make_shared<CheckingAccount>(accNum, nullptr);
+        return make_shared<CheckingAccount>(accNum, v[1], stoll(v[2]), v[3]);
     }
     return nullptr;
 }

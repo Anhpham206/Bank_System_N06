@@ -1,15 +1,16 @@
 #include "LoginCmd.h"
+#include "../../Business/AppContext.h"
 
 #include <iostream>
 
-LoginCmd::LoginCmd(std::shared_ptr<BankSystem> bankSystem)
+LoginCmd::LoginCmd()
 {
-    _bankSystem = bankSystem;
 }
 void LoginCmd::execute()
 {
     string username;
     string pass;
+    auto bankSystem = AppContext::getInstance().getBankSystem();
     do
     {
         std::cout << "Tên đăng nhập: \t";
@@ -18,6 +19,6 @@ void LoginCmd::execute()
         std::cout << "Mật khẩu: \t";
 
         std::cin >> pass;
-    } while (!_bankSystem->login(username, pass));
+    } while (!bankSystem->login(username, pass));
     return;
 }

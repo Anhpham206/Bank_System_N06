@@ -1,8 +1,13 @@
-#include "UI/Views/CustomerView.h"
+// #include "UI/Views/CustomerView.h"
+#include "Business/AppContext.h"
+
+#include <iostream>
 
 int main()
 {
-    UI::CustomerView view;
-    view.render();
+    AppContext::getInstance().initialize("N06");
+    shared_ptr<BankSystem> bank = AppContext::getInstance().getBankSystem();
+
+    std::cout << bank->info();
     system("pause");
 }

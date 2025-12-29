@@ -1,4 +1,5 @@
 #include "DepositCmd.h"
+#include "../Transaction/DepositTransaction.h"
 
 DepositCmd::DepositCmd(std::shared_ptr<DepositTransaction> transaction)
 {
