@@ -33,6 +33,8 @@ public:
     void loadAccountNumber(string accountNumber);
     std::string info() override;
 
+    std::vector<std::string> getOwnedAccountIds();
+
     std::string username();
 
     void saveToFile(); // Hàm lưu thông tin khách hàng ra file
