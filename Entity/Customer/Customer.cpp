@@ -119,6 +119,10 @@ void Customer::saveToFile()
     }
 }
 
+std::vector<std::string> Customer::getOwnedAccountIds() {
+    return _ownedAccount;
+}
+
 void Customer::loadAccountNumber(string accountNumber)
 {
     _ownedAccount.push_back(accountNumber);
