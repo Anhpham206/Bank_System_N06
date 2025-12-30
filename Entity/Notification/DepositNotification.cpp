@@ -1,15 +1,15 @@
 #include "DepositNotification.h"
 #include <sstream>
 
-DepositNotification::DepositNotification(std::shared_ptr<Transaction> transaction) //
+DepositNotification::DepositNotification(std::shared_ptr<Transaction> transaction) 
     : Notification(transaction) {
-        // Do nothing
+    // do nothing
 }
 
 std::string DepositNotification::makeMessage() {
     long long amount = _transaction ? _transaction->amount() : 0;
     std::stringstream ss;
-    ss << "Your account has been credited with " << amount << " VND.";
+    ss << "Tai khoan da duoc nap " << amount << " VND.";
     return ss.str();
 }
 
@@ -19,7 +19,6 @@ std::string DepositNotification::message() {
 
 std::string DepositNotification::info() {
     std::stringstream ss;
-    ss << "Deposit Notification | Time: " << _time 
-       << " | Msg: " << makeMessage();
+    ss << "[NAP TIEN] " << _time << " | " << makeMessage();
     return ss.str();
 }

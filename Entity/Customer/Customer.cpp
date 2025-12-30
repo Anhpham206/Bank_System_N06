@@ -123,3 +123,8 @@ void Customer::loadAccountNumber(string accountNumber)
 {
     _ownedAccount.push_back(accountNumber);
 }
+
+std::vector<std::string> Customer::getOwnedAccountIds() const
+{
+    return _ownedAccount;
+}

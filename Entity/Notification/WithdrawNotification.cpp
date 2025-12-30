@@ -1,16 +1,15 @@
 #include "WithdrawNotification.h"
 #include <sstream>
 
-// Cập nhật constructor để nhận shared_ptr
 WithdrawNotification::WithdrawNotification(std::shared_ptr<Transaction> transaction) 
     : Notification(transaction) {
-        // Do nothing
+    // do nothing
 }
 
 std::string WithdrawNotification::makeMessage() {
     long long amount = _transaction ? _transaction->amount() : 0;
     std::stringstream ss;
-    ss << "A withdrawal of " << amount << " VND was successful.";
+    ss << "Rut tien thanh cong " << amount << " VND.";
     return ss.str();
 }
 
@@ -20,7 +19,6 @@ std::string WithdrawNotification::message() {
 
 std::string WithdrawNotification::info() {
     std::stringstream ss;
-    ss << "Withdrawal Notification | Time: " << _time 
-       << " | Msg: " << makeMessage();
+    ss << "[RUT TIEN] " << _time << " | " << makeMessage();
     return ss.str();
 }

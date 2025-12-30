@@ -9,7 +9,7 @@ TransferNotification::TransferNotification(std::shared_ptr<Transaction> transact
 std::string TransferNotification::makeMessage() {
     long long amount = _transaction ? _transaction->amount() : 0;
     std::stringstream ss;
-    ss << "A transfer of " << amount << " VND was processed.";
+    ss << "Chuyen tien thanh cong " << amount << " VND.";
     return ss.str();
 }
 
@@ -19,7 +19,6 @@ std::string TransferNotification::message() {
 
 std::string TransferNotification::info() {
     std::stringstream ss;
-    ss << "Transfer Notification | Time: " << _time 
-       << " | Msg: " << makeMessage();
+    ss << "[CHUYEN TIEN] " << _time << " | " << makeMessage();
     return ss.str();
 }

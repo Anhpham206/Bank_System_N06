@@ -14,4 +14,5 @@ shared_ptr<Object> SavingAccountParser::parse(string data)
         string accNum = v[0];
         return make_shared<SavingAccount>(accNum, v[1], stoll(v[2]), v[3], stod(v[4]));
     }
+    return nullptr; // Thêm return nullptr; để tránh cảnh báo (warning) biến thành lỗi.
 }

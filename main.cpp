@@ -1,54 +1,77 @@
 #include <iostream>
+#include <string>
 #include <memory>
-#include <vector>
-#include "Entity/Account/Account.h" // Thay đổi đường dẫn theo project của bạn
-#include "Entity/Transaction/DepositTransaction.h"
-#include "Entity/Transaction/WithdrawTransaction.h"
-#include "Entity/Transaction/TransferTransaction.h"
-#include "Entity/Notification/Notification.h"
+#include <conio.h>
+#include <windows.h> // Để dùng SetConsoleOutputCP nếu cần tiếng Việt
 
-// Giả sử bạn đã có một lớp ConcreteAccount thực thi từ Account
-class ConcreteAccount : public Account
-{
-public:
-    ConcreteAccount(std::string number, long long bal) : Account(number, nullptr, bal)
-    {
-        // Khởi tạo các thuộc tính từ lớp cha Account
-        // (Lưu ý: Bạn cần gán giá trị cho _accountNumber và _balance trong thực tế)
+// Include các module
+#include "Business/AppContext.h"
+#include "Entity/BankSystem/BankSystem.h"
+#include "UI/Views/CustomerView.h"
+#include "UI/Utils/ConsoleUtils.h"
+
+using namespace std;
+
+void showLoginScreen() {
+    UI::ConsoleUtils::clearScreen();
+    cout << "=======================================\n";
+    cout << "      HE THONG QUAN LY NGAN HANG       \n";
+    cout << "=======================================\n\n";
+}
+
+int main() {
+    // Hỗ trợ hiển thị tiếng Việt (nếu cần)
+    SetConsoleOutputCP(65001); 
+
+    // 1. Khởi tạo hệ thống
+    AppContext::getInstance().initialize("NGAN HANG N06");
+    auto bank = AppContext::getInstance().getBankSystem();
+
+    // 2. NẠP DỮ LIỆU TỪ FILE
+    // Hàm này sẽ tự động đọc Data/Customers và Data/Accounts
+    cout << "Dang khoi tao du lieu tu file...\n";
+    try {
+        bank->run(); 
+        cout << "[OK] Da nap du lieu thanh cong.\n";
+    } catch (const std::exception& e) {
+        cout << "[LOI] Khong the doc file du lieu: " << e.what() << "\n";
+        cout << "Vui long kiem tra lai thu muc Data.\n";
+        system("pause");
+        return 1;
     }
-    void loadFromFile(std::string numberAccount) override {}
-};
+    Sleep(1000); // Dừng 1 chút để user thấy thông báo
 
-int main()
-{
-    // 1. Khởi tạo tài khoản bằng shared_ptr (Bắt buộc)
-    auto accountA = std::make_shared<ConcreteAccount>("ACC001", 5000000); // 5 triệu VND
-    auto accountB = std::make_shared<ConcreteAccount>("ACC002", 1000000); // 1 triệu VND
+    // 3. Vòng lặp đăng nhập
+    bool appRunning = true;
+    while (appRunning) {
+        showLoginScreen();
 
-    std::cout << "--- STARTING BANK TRANSACTION TEST ---" << std::endl;
+        string username, password;
+        cout << "--- DANG NHAP ---\n";
+        cout << "(Go 'exit' de thoat chuong trinh)\n\n";
+        
+        cout << "Username: "; cin >> username;
+        if (username == "exit") {
+            appRunning = false;
+            break;
+        }
 
-    // 2. Test Giao dịch nạp tiền (Deposit)
-    auto depTrans = std::make_shared<DepositTransaction>("DEP_001", accountA, 2000000);
-    depTrans->execute(); //
+        cout << "Password: "; cin >> password;
 
-    // 3. Test Giao dịch rút tiền (Withdraw)
-    auto withTrans = std::make_shared<WithdrawTransaction>("WIT_001", accountA, 1000000);
-    withTrans->execute(); //
-
-    // 4. Test Giao dịch chuyển khoản (Transfer)
-    auto transTransaction = std::make_shared<TransferTransaction>("TRA_001", accountA, accountB, 500000);
-    transTransaction->execute(); //
-
-    // 5. Kiểm tra kết quả Thông báo (Notification)
-
-    std::cout << "\n--- CHECKING NOTIFICATIONS FOR ACCOUNT A ---" << std::endl;
-    auto notifications = accountA->Notifications(); //
-
-    for (const auto &notif : notifications)
-    {
-        notif->displayInfo(); // Sẽ in ra nội dung tiếng Anh bạn đã sửa
+        // Xử lý đăng nhập
+        if (bank->login(username, password)) {
+            // Đăng nhập thành công -> Vào màn hình chính CustomerView
+            UI::CustomerView view;
+            view.render(); 
+            
+            // Khi user chọn Đăng xuất trong menu, render() kết thúc -> Quay lại đây
+            bank->logout();
+        } else {
+            cout << "\nDang nhap that bai! Nhan phim bat ky de thu lai...";
+            _getch();
+        }
     }
-    system("pause");
 
+    cout << "\nTam biet quy khach!\n";
     return 0;
 }

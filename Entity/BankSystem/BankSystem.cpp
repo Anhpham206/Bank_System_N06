@@ -1,7 +1,7 @@
 #include "BankSystem.h"
-#include "../Business/ParserFactory/ParserFactory.h"
-#include "../Business/CheckingAccountParser/CheckingAccountParser.h"
-#include "../Business/SavingAccountParser/SavingAccountParser.h"
+#include "../../Business/ParserFactory/ParserFactory.h"
+#include "../../Business/CheckingAccountParser/CheckingAccountParser.h"
+#include "../../Business/SavingAccountParser/SavingAccountParser.h"
 
 #include "../Account/Account.h"
 #include "../Customer/Customer.h"
@@ -132,7 +132,7 @@ shared_ptr<Account> BankSystem::getAccount(string accountNumber)
     }
     else
     {
-        cout << "Tài khoản không tồn tại!\n";
+        cout << "Tai khoan khong ton tai!\n";
         return nullptr;
     }
 }

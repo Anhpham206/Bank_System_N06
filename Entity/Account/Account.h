@@ -15,7 +15,6 @@ protected: // [ĐÃ SỬA] Để class con (Saving và Checking) có thể thay 
     std::string _accountNumber;
     long long _balance;
     string _owner;
-    // [ĐÃ SỬA] Dùng shared_ptr để quản lý danh sách thông báo
     std::vector<string> _notifications;
     std::string _PIN;
 

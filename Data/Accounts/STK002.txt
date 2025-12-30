@@ -1,0 +1,2 @@
+SavingAccount
+STK002, Nguyen Van A, 20000000, 1234, 0.05

@@ -1,6 +1,7 @@
 #include "Notification.h"
 #include <iostream>
 #include <ctime>
+#include <vector>
 
 Notification::Notification(std::shared_ptr<Transaction> transaction)
     : _transaction(transaction) {
@@ -17,8 +18,8 @@ Notification::Notification(std::shared_ptr<Transaction> transaction)
 }
 
 void Notification::displayInfo() {
-    std::cout << "--------- NOTIFICATION ---------" << std::endl;
-    std::cout << "Time   : " << _time << std::endl;
-    std::cout << "Message: " << message() << std::endl;
-    std::cout << "--------------------------------" << std::endl;
+    std::cout << "--------- THONG BAO ---------" << std::endl;
+    std::cout << "Thoi gian: " << _time << std::endl;
+    std::cout << "Noi dung : " << message() << std::endl;
+    std::cout << "-----------------------------" << std::endl;
 }
