@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-int main()
+int test()
 {
     AppContext::getInstance().initialize("N06");
     shared_ptr<BankSystem> bank = AppContext::getInstance().getBankSystem();

@@ -5,6 +5,7 @@
 CheckingAccount::CheckingAccount(std::string accountNumber, string owner, long long balance, string PIN)
     : Account(accountNumber, owner, balance, PIN)
 {
+    _type = "Checking Account";
 }
 
 std::string CheckingAccount::info()

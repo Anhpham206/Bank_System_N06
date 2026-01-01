@@ -14,17 +14,15 @@ Customer::Customer()
     _username = "";
     _password = "";
     _phoneNumber = "";
-    _address = "";
 }
 
-Customer::Customer(std::string id, std::string name, std::string user, std::string pass, std::string phone, std::string address)
+Customer::Customer(std::string id, std::string name, std::string user, std::string pass, std::string phone)
 {
     _customerId = id;
     _fullName = name;
     _username = user;
     _password = pass;
     _phoneNumber = phone;
-    _address = address;
 }
 
 std::string Customer::getCustomerId()
@@ -81,7 +79,7 @@ std::shared_ptr<Account> Customer::getAccount(std::string acctNum)
 
 std::string Customer::info()
 {
-    return "ID: " + _customerId + " | Name: " + _fullName + " | Phone: " + _phoneNumber;
+    return "ID: " + _customerId + "\nTen khach hang: " + _fullName + "\nSo dien thoai: " + _phoneNumber;
 }
 
 std::string Customer::username()
@@ -102,7 +100,6 @@ void Customer::saveToFile()
         outFile << _username << "\n";
         outFile << _password << "\n";
         outFile << _phoneNumber << "\n";
-        outFile << _address << "\n";
 
         outFile << _ownedAccount.size() << "\n";
         for (const std::string &accId : _ownedAccount)
@@ -119,19 +116,17 @@ void Customer::saveToFile()
     }
 }
 
-std::vector<std::string> Customer::getOwnedAccountIds() {
+std::vector<std::string> Customer::getOwnedAccountIds()
+{
     return _ownedAccount;
 }
 
-void Customer::loadAccountNumber(string accountNumber)
+void Customer::addAccountNumber(string accountNumber)
 {
     _ownedAccount.push_back(accountNumber);
 }
-<<<<<<< HEAD
 
 std::vector<std::string> Customer::getOwnedAccountIds() const
 {
     return _ownedAccount;
 }
-=======
->>>>>>> 786cb0ccf22f8015505b8e1dbc9fbad0a1639d43

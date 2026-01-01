@@ -20,7 +20,7 @@ namespace UI
         // [MỚI] Biến để lưu ngữ cảnh làm việc
         std::shared_ptr<BankSystem> _bankSystem;
         std::shared_ptr<Customer> _currentCustomer;
-        
+
         // Danh sách các lựa chọn trong menu
         std::vector<std::string> _menuOptions;
 
@@ -33,18 +33,19 @@ namespace UI
         // --- Các hàm điều hướng đến trang chức năng (Placeholder) ---
         void showUserInfoPage();    // Thông tin người dùng
         void showAccountListPage(); // Danh sách tài khoản
-        void showAddAccountPage();  // Thêm tài khoản
-        void showNotificationsPage(); // [MỚI] Hàm hiển thị thông báo
-        void handleLogout();        // Đăng xuất
-        // Thêm các hàm xử lý giao dịch mới
-        void handleDeposit();   // Xử lý nạp tiền
-        void handleWithdraw();  // Xử lý rút tiền
-        void handleTransfer();  // Xử lý chuyển khoản
+        // void showAddAccountPage();    // Thêm tài khoản
+        // void showNotificationsPage(); // [MỚI] Hàm hiển thị thông báo
+        void handleLogout(); // Đăng xuất
+        // // Thêm các hàm xử lý giao dịch mới
+        // void handleDeposit();  // Xử lý nạp tiền
+        // void handleWithdraw(); // Xử lý rút tiền
+        // void handleTransfer(); // Xử lý chuyển khoản
 
         // Hàm phụ trợ để lấy tài khoản từ input
-        std::shared_ptr<Account> inputOwnedAccount(std::string prompt);
+        // std::shared_ptr<Account> inputOwnedAccount(std::string prompt);
+
     public:
-        CustomerView(std::shared_ptr<BankSystem> system, std::shared_ptr<Customer> customer); // Constructor để khởi tạo menu
+        CustomerView(); // Constructor để khởi tạo menu
         void render();  // Hàm chính để hiển thị và xử lý vòng lặp
     };
 
