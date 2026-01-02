@@ -20,7 +20,7 @@ namespace UI
         // [MỚI] Biến để lưu ngữ cảnh làm việc
         std::shared_ptr<BankSystem> _bankSystem;
         std::shared_ptr<Customer> _currentCustomer;
-        
+
         // Danh sách các lựa chọn trong menu
         std::vector<std::string> _menuOptions;
 
@@ -34,30 +34,17 @@ namespace UI
         void showUserInfoPage();    // Thông tin người dùng
         void showAccountListPage(); // Danh sách tài khoản
         void showAddAccountPage();  // Thêm tài khoản
-        void showNotificationsPage(); // [MỚI] Hàm hiển thị thông báo
         void handleLogout();        // Đăng xuất
-        // Thêm các hàm xử lý giao dịch mới
-        void handleDeposit();   // Xử lý nạp tiền
-        void handleWithdraw();  // Xử lý rút tiền
-        void handleTransfer();  // Xử lý chuyển khoản
+        // // Thêm các hàm xử lý giao dịch mới
+        // void handleDeposit();  // Xử lý nạp tiền
+        // void handleWithdraw(); // Xử lý rút tiền
+        // void handleTransfer(); // Xử lý chuyển khoản
 
-<<<<<<< HEAD
         // Hàm phụ trợ để lấy tài khoản từ input
-        std::shared_ptr<Account> inputOwnedAccount(std::string prompt);
-=======
-        // --- Các hàm chức năng chi tiết cho từng tài khoản ---
-        // Khi chọn 1 tài khoản từ danh sách, sẽ vào màn hình này
-        void showAccountDetailPage(std::string accountNumber);
+        // std::shared_ptr<Account> inputOwnedAccount(std::string prompt);
 
-        void showDepositPage(std::string accountNumber);  // Nạp tiền
-        void showWithdrawPage(std::string accountNumber); // Rút tiền
-        
-        // Hàm hỗ trợ hiển thị và chọn menu (tái sử dụng logic W/S)
-        int navigateMenu(const std::vector<std::string>& options, std::string title);
-
->>>>>>> 786cb0ccf22f8015505b8e1dbc9fbad0a1639d43
     public:
-        CustomerView(std::shared_ptr<BankSystem> system, std::shared_ptr<Customer> customer); // Constructor để khởi tạo menu
+        CustomerView(); // Constructor để khởi tạo menu
         void render();  // Hàm chính để hiển thị và xử lý vòng lặp
     };
 

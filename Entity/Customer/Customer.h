@@ -16,7 +16,6 @@ private:
     std::string _username;
     std::string _password;
     std::string _phoneNumber;
-    std::string _address;
     // std::vector<Account *> _ownedAccount;
 
     std::vector<string> _ownedAccount;
@@ -24,14 +23,14 @@ private:
 
 public:
     Customer(); // Hàm tạo không tham số
-    Customer(std::string id, std::string name, std::string user, std::string pass, std::string phone, std::string address);
+    Customer(std::string id, std::string name, std::string user, std::string pass, std::string phone);
     std::string getCustomerId();
     std::string getName();
     bool verifyPassword(std::string pass);
     void addAccount(std::shared_ptr<Account> acct); // them Account vao co so du lieu cua BankSystem nua
     void removeAccount(std::string acctNum);
     std::shared_ptr<Account> getAccount(std::string acctNum);
-    void loadAccountNumber(string accountNumber);
+    void addAccountNumber(string accountNumber);
     std::string info() override;
 
     std::vector<std::string> getOwnedAccountIds();

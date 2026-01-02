@@ -56,3 +56,8 @@ std::string Account::info()
 {
     return "Account No: " + _accountNumber + " | Balance: " + std::to_string(_balance);
 }
+
+string Account::type()
+{
+    return _type;
+}

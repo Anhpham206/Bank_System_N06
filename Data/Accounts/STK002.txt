@@ -1,2 +1,2 @@
 SavingAccount
-STK002, Nguyen Van A, 20000000, 1234, 0.05
+STK002, user1, 20000000, 1234, 0.05

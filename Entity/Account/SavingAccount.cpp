@@ -6,6 +6,7 @@ SavingAccount::SavingAccount(std::string accountNumber, string owner, long long 
     : Account(accountNumber, owner, balance, PIN)
 {
     _interestRate = rate;
+    _type = "Saving Account";
 }
 
 void SavingAccount::addInterest()

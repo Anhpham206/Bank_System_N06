@@ -35,6 +35,8 @@ public:
     shared_ptr<Account> getAccount(string accountNumber);
     shared_ptr<Customer> currentCustomer();
     string info() override;
+
+    void check();
 };
 
 #endif

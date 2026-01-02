@@ -42,11 +42,16 @@ void BankSystem::removeAccount(string accountNumber)
 void BankSystem::run()
 {
     // doc danh sach tai khoan
-    std::ifstream fcustomers("../../Data/Customers/Customers.txt");
+    std::ifstream fcustomers("Data/Customers/Customers.txt");
+    if (!fcustomers)
+    {
+        cout << "khong mo duoc file customer\n";
+    }
     string line;
     vector<string> customers;
     while (getline(fcustomers, line))
     {
+        cout << line << "\n";
         customers.push_back(line);
     }
     fcustomers.close();
@@ -55,13 +60,13 @@ void BankSystem::run()
     // doc tai khoan
     for (string name : customers)
     {
-        std::ifstream fin("../../Data/Customers/" + name + ".txt");
+        std::ifstream fin("Data/Customers/" + name + ".txt");
         IParsable *parser = factory.create("Customer");
         getline(fin, line);
         shared_ptr<Customer> customer = std::dynamic_pointer_cast<Customer>(parser->parse(line));
         while (getline(fin, line))
         {
-            customer->loadAccountNumber(line);
+            customer->addAccountNumber(line);
         }
         _customers[customer->username()] = customer;
         fin.close();
@@ -69,7 +74,7 @@ void BankSystem::run()
     }
 
     // doc danh sach account
-    std::ifstream fAccounts("../../Data/Accounts/Accounts.txt");
+    std::ifstream fAccounts("Data/Accounts/Accounts.txt");
     vector<string> accounts;
     while (getline(fAccounts, line))
     {
@@ -79,7 +84,7 @@ void BankSystem::run()
     // doc account
     for (string name : accounts)
     {
-        std::ifstream fin("../../Data/Accounts/" + name + ".txt");
+        std::ifstream fin("Data/Accounts/" + name + ".txt");
         getline(fin, line);
         IParsable *parser = factory.create(line);
         getline(fin, line);
@@ -98,6 +103,7 @@ shared_ptr<Customer> BankSystem::currentCustomer()
 
 bool BankSystem::login(string username, string pass)
 {
+    check();
 
     if (_customers.find(username) != _customers.end())
     {
@@ -132,7 +138,14 @@ shared_ptr<Account> BankSystem::getAccount(string accountNumber)
     }
     else
     {
-        cout << "Tai khoan khong ton tai!\n";
         return nullptr;
+    }
+}
+
+void BankSystem::check()
+{
+    for (auto i : _customers)
+    {
+        cout << i.first << "\n";
     }
 }
