@@ -138,7 +138,6 @@ shared_ptr<Account> BankSystem::getAccount(string accountNumber)
     }
     else
     {
-        cout << "Tai khoan khong ton tai!\n";
         return nullptr;
     }
 }

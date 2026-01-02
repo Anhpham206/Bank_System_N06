@@ -33,9 +33,8 @@ namespace UI
         // --- Các hàm điều hướng đến trang chức năng (Placeholder) ---
         void showUserInfoPage();    // Thông tin người dùng
         void showAccountListPage(); // Danh sách tài khoản
-        void showAddAccountPage();    // Thêm tài khoản
-        // void showNotificationsPage(); // [MỚI] Hàm hiển thị thông báo
-        void handleLogout(); // Đăng xuất
+        void showAddAccountPage();  // Thêm tài khoản
+        void handleLogout();        // Đăng xuất
         // // Thêm các hàm xử lý giao dịch mới
         // void handleDeposit();  // Xử lý nạp tiền
         // void handleWithdraw(); // Xử lý rút tiền

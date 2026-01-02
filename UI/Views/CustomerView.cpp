@@ -1,13 +1,14 @@
 #include "CustomerView.h"
 #include "../Utils/ConsoleUtils.h"
 #include "AccountView.h"
+#include "../../Helper/Utils.h"
 
 // 1. Include các module hệ thống
 #include "../../Business/AppContext.h"
-#include "../../Entity/BankSystem/BankSystem.h"
+// #include "../../Entity/BankSystem/BankSystem.h"
 #include "../../Entity/Customer/Customer.h"
-#include "../../Entity/Account/CheckingAccount.h" // Dùng để tạo tài khoản mới
-#include "../../Entity/Account/SavingAccount.h"  // Dùng để tạo tài khoản mới 
+// #include "../../Entity/Account/CheckingAccount.h" // Dùng để tạo tài khoản mới
+// #include "../../Entity/Account/SavingAccount.h"   // Dùng để tạo tài khoản mới
 
 // 2. Include các Command
 #include "../../Entity/Command/DepositCmd.h"
@@ -20,6 +21,9 @@
 #include "../../Entity/Transaction/DepositTransaction.h"
 #include "../../Entity/Transaction/WithdrawTransaction.h"
 #include "../../Entity/Transaction/TransferTransaction.h"
+
+#include "../../Business/ParserFactory/ParserFactory.h"
+#include "../../Business/IParsable.h"
 
 #include <iostream>
 #include <conio.h>
@@ -114,7 +118,7 @@ void UI::CustomerView::render()
                     break;
                 }
                 case 3:
-                    // showAddAccountPage();
+                    showAddAccountPage();
                     break;
                 case 4:
                     handleLogout();
@@ -261,9 +265,8 @@ void UI::CustomerView::showAddAccountPage()
     vector<string> accountTypes = {
         "1. Checking Account (Tai khoan thanh toan)",
         "2. Saving Account (Tai khoan tiet kiem)",
-        "3. Quay lai"
-    };
-    
+        "3. Quay lai"};
+
     int localIndex = 1; // Biến index cục bộ cho menu này
     bool selectingType = true;
 
@@ -298,14 +301,16 @@ void UI::CustomerView::showAddAccountPage()
 
             if (key == 'w' || key == 'W')
             {
-                if (localIndex > 1) {
+                if (localIndex > 1)
+                {
                     UI::ConsoleUtils::goUp();
                     localIndex--;
                 }
             }
             else if (key == 's' || key == 'S')
             {
-                if (localIndex < (int)accountTypes.size()) {
+                if (localIndex < (int)accountTypes.size())
+                {
                     UI::ConsoleUtils::goDown();
                     localIndex++;
                 }
@@ -315,12 +320,12 @@ void UI::CustomerView::showAddAccountPage()
                 // Xử lý lựa chọn
                 if (localIndex == 3) // Quay lại
                 {
-                    return; 
+                    return;
                 }
-                
+
                 // Nếu chọn 1 hoặc 2, thoát vòng lặp menu để sang màn hình nhập liệu
                 selectingType = false;
-                break; 
+                break;
             }
 
             // Vẽ lại mũi tên ở vị trí mới
@@ -333,22 +338,15 @@ void UI::CustomerView::showAddAccountPage()
     // ---------------------------------------------------------
     // PHẦN 2: MÀN HÌNH NHẬP THÔNG TIN (Sau khi đã chọn loại)
     // ---------------------------------------------------------
-    
+
     UI::ConsoleUtils::clearScreen();
     string accTypeStr = (localIndex == 1) ? "CHECKING ACCOUNT" : "SAVING ACCOUNT";
-    
+
     cout << "--- TAO " << accTypeStr << " ---\n\n";
 
-    string accNum, pin;
-    long long initBalance;
-
     // Nhập Số tài khoản
-    cout << "Nhap so tai khoan moi: ";
-    std::getline(std::cin, accNum); 
-    // Fix trôi lệnh nếu trước đó cin còn sót (tuy nhiên _getch() không để lại buffer nên thường ok, 
-    // nhưng nếu input trước đó dùng cin thì cần cẩn thận. Ở đây dùng getline an toàn hơn).
-    if (accNum.empty()) std::getline(std::cin, accNum); 
-
+    cout << "Nhap so tai khoan moi (10 so): ";
+    string accNum = Utils::inputNumber(10);
     // Kiểm tra trùng lặp
     if (_bankSystem->getAccount(accNum) != nullptr)
     {
@@ -359,39 +357,33 @@ void UI::CustomerView::showAddAccountPage()
 
     // Nhập PIN
     cout << "Nhap ma PIN (6 so): ";
-    std::getline(std::cin, pin);
-
+    string pin = Utils::inputNumber(6);
     // Nhập số dư ban đầu
     cout << "Nhap so du ban dau: ";
-    std::cin >> initBalance;
-    std::cin.ignore(); // Xóa buffer sau khi nhập số
-
+    string initBalance = Utils::inputNumber(15);
     shared_ptr<Account> newAccount = nullptr;
-    string ownerName = _currentCustomer->getName();
+    string ownerUsername = _currentCustomer->username();
+    ParserFactory factory;
+    string data = accNum + ", " + ownerUsername + ", " + initBalance + ", " + pin;
 
     // Tạo object dựa trên lựa chọn menu trước đó
-    if (localIndex == 1) 
+    if (localIndex == 1)
     {
-        // Checking Account
-        newAccount = std::make_shared<CheckingAccount>(accNum, ownerName, initBalance, pin);
+        IParsable *parser = factory.create("CheckingAccount");
+        newAccount = std::static_pointer_cast<Account>(parser->parse(data));
     }
-    else 
+    else
     {
-        // Saving Account - Cần thêm lãi suất
-        double rate;
-        cout << "Nhap lai suat (%/nam, VD: 0.05): ";
-        std::cin >> rate;
-        std::cin.ignore();
-        
-        newAccount = std::make_shared<SavingAccount>(accNum, ownerName, initBalance, pin, rate);
+        data += ", 0.05";
+        IParsable *parser = factory.create("SavingAccount");
+        newAccount = std::static_pointer_cast<Account>(parser->parse(data));
     }
 
     // Lưu vào hệ thống
     if (newAccount)
     {
         _currentCustomer->addAccount(newAccount);
-        // Lưu ý: addAccount của Customer đã tự gọi bankSystem->addAccount (theo code Customer.cpp của bạn)
-        
+
         cout << "\n[THANH CONG] Da tao tai khoan moi!\n";
         cout << "So TK: " << accNum << "\n";
         cout << "Loai: " << accTypeStr << "\n";
