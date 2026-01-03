@@ -4,7 +4,8 @@
 #include <string>
 #include <memory>
 #include "../Object.h."
-#include "../Account/Account.h"
+
+class Account;
 
 using std::shared_ptr;
 
@@ -20,9 +21,10 @@ public:
 
 public:
     virtual std::string info() = 0;
-    virtual void execute() = 0;
+    virtual bool execute() = 0;
 
     shared_ptr<Account> sourceAccount();
+    virtual shared_ptr<Account> destAccount() = 0;
     long long amount();
 };
 

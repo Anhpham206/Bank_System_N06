@@ -14,7 +14,7 @@ private:
 
 public:
     ShowNotificationsCmd(std::shared_ptr<Account> account);
-    void execute() override;
+    bool execute() override;
     ~ShowNotificationsCmd() override = default;
 };
 

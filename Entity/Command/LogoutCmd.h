@@ -9,7 +9,7 @@ class LogoutCmd : public ICommand
 {
 public:
     LogoutCmd();
-    void execute() override;
+    bool execute() override;
     ~LogoutCmd() override = default;
 };
 

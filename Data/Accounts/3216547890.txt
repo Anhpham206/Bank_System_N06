@@ -1,0 +1,2 @@
+CheckingAccount
+3216547890, user2, 10000000, 345678

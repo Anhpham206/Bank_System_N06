@@ -14,7 +14,7 @@ private:
 
 public:
     DepositCmd(std::shared_ptr<DepositTransaction> transaction);
-    void execute() override;
+    bool execute() override;
     ~DepositCmd() override = default;
 };
 

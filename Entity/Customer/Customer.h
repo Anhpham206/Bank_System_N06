@@ -27,6 +27,11 @@ public:
     std::string getCustomerId();
     std::string getName();
     bool verifyPassword(std::string pass);
+
+    // Getters used for persistence
+    std::string password() const;
+    std::string phoneNumber() const;
+
     void addAccount(std::shared_ptr<Account> acct); // them Account vao co so du lieu cua BankSystem nua
     void removeAccount(std::string acctNum);
     std::shared_ptr<Account> getAccount(std::string acctNum);
@@ -36,8 +41,6 @@ public:
     std::vector<std::string> getOwnedAccountIds();
 
     std::string username();
-
-    void saveToFile(); // Hàm lưu thông tin khách hàng ra file
 
     std::vector<std::string> getOwnedAccountIds() const;
 };

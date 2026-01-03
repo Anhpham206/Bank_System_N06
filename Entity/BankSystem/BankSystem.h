@@ -30,11 +30,13 @@ public:
     void addAccount(shared_ptr<Account> account);
     void removeAccount(string accountNumber);
     void run();
+    void save();
     bool login(string username, string pass);
     void logout();
     shared_ptr<Account> getAccount(string accountNumber);
     shared_ptr<Customer> currentCustomer();
     string info() override;
+    shared_ptr<Customer> getCustomer(string username);
 
     void check();
 };

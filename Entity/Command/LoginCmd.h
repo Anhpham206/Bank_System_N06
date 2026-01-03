@@ -6,12 +6,20 @@
 #include <string>
 #include <memory>
 
+using std::string;
+
 class LoginCmd : public ICommand
 {
+private:
+    string _username;
+    string _password;
 
 public:
     LoginCmd();
-    void execute() override;
+    LoginCmd(string username, string password);
+
+public:
+    bool execute() override;
     ~LoginCmd() override = default;
 };
 

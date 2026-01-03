@@ -4,73 +4,84 @@
 #include "../../Helper/Utils.h"
 #include "../../Business/ParserFactory/ParserFactory.h" // Dùng Factory
 #include "../../Business/IParsable.h"
+#include "../../Entity/Customer/Customer.h"
 
 #include <iostream>
 #include <string>
 #include <conio.h>
+#include <memory>
 
 using std::cout, std::string, std::getline, std::cin;
 
-void UI::RegisterView::render() {
+void UI::RegisterView::render()
+{
     UI::ConsoleUtils::clearScreen();
     cout << "=========================================\n";
-    cout << "           DANG KY TAI KHOAN             \n";
+    cout << "              NGAN HANG N06              \n";
     cout << "=========================================\n\n";
+    cout << "----------- DANG KY TAI KHOAN -----------\n\n";
 
-    string username, pass, confirmPass, name, idCard;
+    string username, pass, confirmPass, name, phone;
 
     // 1. Nhập thông tin cơ bản
-    cout << "Nhap Username: "; 
-    getline(cin, username);
 
-
-    cout << "Nhap Ho va Ten: "; 
+    cout << "Nhap Ho va Ten: ";
     getline(cin, name);
 
-    cout << "Nhap CCCD (Chi nhap so): ";
-    idCard = Utils::inputNumber(12); 
+    cout << "Nhap so dien thoai: ";
+    phone = Utils::inputNumberFixedLength(10);
     cout << "\n";
 
-    cout << "Nhap Password: "; 
-    getline(cin, pass);
+    cout << "Nhap Ten dang nhap: ";
+    getline(cin, username);
 
-    cout << "Xac nhan Password: "; 
-    getline(cin, confirmPass);
+    cout << "Nhap Mat khau: ";
+    pass = Utils::inputPassword();
+    cout << "\n";
 
-    if (pass != confirmPass) {
-        cout << "\n[!] Mat khau khong khop!\nNhan phim bat ky de quay lai...";
-        _getch();
-        return;
-    }
-
-    // 2. Tạo Customer bằng ParserFactory
-    // Giả sử format CustomerParser là: username, password, name, idCard
-    try {
-        ParserFactory factory;
-        IParsable* parser = factory.create("Customer");
-        
-        if (parser) {
-            string data = username + ", " + pass + ", " + name + ", " + idCard;
-            auto newObj = parser->parse(data);
-            auto newCust = std::static_pointer_cast<Customer>(std::shared_ptr<Object>(newObj));
-
-            if (newCust) {
-                AppContext::getInstance().getBankSystem()->addCustomer(newCust);
-                cout << "\n[THANH CONG] Dang ky tai khoan thanh cong!";
-                cout << "\nVui long dang nhap de su dung.";
-            } else {
-                 cout << "\n[LOI] Khong the tao du lieu khach hang.";
-            }
-        } else {
-            // Fallback nếu chưa có Parser
-            auto newCust = make_shared<Customer>(username, pass, name, idCard);
-            AppContext::getInstance().getBankSystem()->addCustomer(newCust);
-            cout << "\n[THANH CONG] Dang ky thanh cong (Direct)!";
+    int startY = UI::ConsoleUtils::getWhereY();
+    while (true)
+    {
+        cout << "Xac nhan Mat khau: ";
+        confirmPass = Utils::inputPassword();
+        cout << "\n";
+        if (pass == confirmPass)
+        {
+            cout << "                          ";
+            break;
         }
-    } catch (...) {
-        cout << "\n[LOI] Da xay ra loi he thong khi dang ky.";
+        cout << "[!] Mat khau khong khop!";
+        // Xóa dòng xác nhận mật khẩu không khớp
+        UI::ConsoleUtils::goToXY(0, startY);
+        cout << "                   " << "                       ";
+        UI::ConsoleUtils::goToXY(0, startY);
     }
 
-    cout << "\nNhan phim bat ky de quay lai...";
+    ParserFactory factory;
+    IParsable *parser = factory.create("Customer");
+
+    if (parser)
+    {
+        string data = phone + ", " + name + ", " + username + ", " + pass + ", " + phone;
+        auto newObj = parser->parse(data);
+        std::shared_ptr<Customer> newCust = std::dynamic_pointer_cast<Customer>(newObj);
+
+        if (newCust)
+        {
+            AppContext::getInstance().getBankSystem()->addCustomer(newCust);
+            cout << "\n[THANH CONG] Dang ky tai khoan thanh cong!";
+            cout << "\nVui long dang nhap de su dung.";
+        }
+        else
+        {
+            cout << "\n[LOI] Khong the tao du lieu khach hang.";
+        }
+    }
+    else
+    {
+        cout << "\nHe thong dang loi vui long thu lai sau!";
+    }
+
+    cout << "\n\nNhan phim bat ky de quay lai...";
     _getch();
 }

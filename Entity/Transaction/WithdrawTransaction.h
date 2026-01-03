@@ -6,15 +6,14 @@
 
 class WithdrawTransaction : public Transaction
 {
-private:
-    string _PIN;
 
 public:
-    WithdrawTransaction(std::shared_ptr<Account> acc, long long amount, string PIN);
+    WithdrawTransaction(std::shared_ptr<Account> acc, long long amount);
 
 public:
     std::string info() override;
-    void execute() override;
+    bool execute() override;
+    std::shared_ptr<Account> destAccount() override;
 };
 
 #endif

@@ -1,3 +1,0 @@
-CUST001, Nguyen Van A, user1, 123, 090999888
-STK001
-STK002

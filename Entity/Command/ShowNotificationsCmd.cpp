@@ -11,12 +11,17 @@ ShowNotificationsCmd::ShowNotificationsCmd(std::shared_ptr<Account> account)
 {
     _account = account;
 }
-void ShowNotificationsCmd::execute()
+bool ShowNotificationsCmd::execute()
 {
     vector<string> list = _account->notifications();
+    if (list.empty())
+    {
+        std::cout << "Khong co thong bao!\n";
+        return false;
+    }
     for (string notification : list)
     {
         std::cout << notification << "\n";
     }
-    return;
+    return true;
 }

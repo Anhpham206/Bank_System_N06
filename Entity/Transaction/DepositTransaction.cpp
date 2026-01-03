@@ -1,5 +1,8 @@
 #include "DepositTransaction.h"
 #include "../Notification/DepositNotification.h"
+#include "../Command/DisplayInfoCmd.h"
+#include "../Notification/DepositNotification.h"
+#include "../Account/Account.h"
 #include <iostream>
 #include <sstream>
 
@@ -13,7 +16,17 @@ std::string DepositTransaction::info()
     return ss.str();
 }
 
-void DepositTransaction::execute()
+bool DepositTransaction::execute()
 {
     _srcAccount->deposit(_amount);
+    std::shared_ptr<DepositNotification> notification = std::make_shared<DepositNotification>(shared_from_this());
+    _srcAccount->addNotification(notification->message());
+    DisplayInfoCmd displayCmd(notification);
+    displayCmd.execute();
+    return true;
+}
+
+std::shared_ptr<Account> DepositTransaction::destAccount()
+{
+    return nullptr;
 }

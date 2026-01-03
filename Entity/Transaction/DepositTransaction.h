@@ -2,7 +2,7 @@
 #define DEPOSIT_TRANSACTION_H
 
 #include "Transaction.h"
-#include <memory> // Cần thiết cho std::weak_ptr
+#include <memory>
 
 class DepositTransaction : public Transaction
 {
@@ -12,7 +12,8 @@ public:
 
 public:
     std::string info() override;
-    void execute() override;
+    bool execute() override;
+    std::shared_ptr<Account> destAccount() override;
 };
 
 #endif

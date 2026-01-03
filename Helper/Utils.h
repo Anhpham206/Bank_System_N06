@@ -16,6 +16,11 @@ namespace Utils
     std::vector<std::string> split(std::string hay, std::string delimiter = ", ");
 
     string inputNumber(int size);
+
+    // Nhập số với độ dài cố định: chỉ chấp nhận Enter khi nhập đủ `size` ký tự
+    string inputNumberFixedLength(int size);
+
+    string inputPassword();
 } // namespace Utils
 
 #endif

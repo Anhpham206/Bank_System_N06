@@ -16,54 +16,10 @@ void SavingAccount::addInterest()
 
 std::string SavingAccount::info()
 {
-    return Account::info() + " | Type: Saving | Rate: " + std::to_string(_interestRate);
+    return "So tai khoan: " + _accountNumber + "\nSo du: " + std::to_string(_balance) + "\nLoai tai khoan: " + _type + "\nLai suat: " + std::to_string(_interestRate * 100) + "%";
 }
 
-void SavingAccount::loadFromFile(std::string numberAccount)
+double SavingAccount::interestRate() const
 {
-    std::string filename = numberAccount + ".txt";
-    std::ifstream inFile(filename);
-
-    if (inFile.is_open())
-    {
-        std::string line;
-
-        // Dòng 1: Đọc balance
-        if (std::getline(inFile, line))
-        {
-            try
-            {
-                _balance = std::stoll(line);
-            }
-            catch (...)
-            {
-                _balance = 0;
-            }
-        }
-
-        // Dòng 2: Đọc pin
-        if (std::getline(inFile, line))
-        {
-            _PIN = line;
-        }
-
-        // Dòng 3: Đọc interest rate
-        if (std::getline(inFile, line))
-        {
-            try
-            {
-                _interestRate = std::stod(line);
-            }
-            catch (...)
-            {
-                _interestRate = 0.0;
-            }
-        }
-
-        inFile.close();
-    }
-    else
-    {
-        std::cout << "Lỗi: Không mở được file " << filename << ".txt\n";
-    }
+    return _interestRate;
 }

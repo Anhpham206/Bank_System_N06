@@ -52,12 +52,17 @@ bool Account::verifyPIN(std::string pin)
     return _PIN == pin;
 }
 
-std::string Account::info()
+std::string Account::pin() const
 {
-    return "Account No: " + _accountNumber + " | Balance: " + std::to_string(_balance);
+    return _PIN;
 }
 
 string Account::type()
 {
     return _type;
+}
+
+string Account::owner()
+{
+    return _owner;
 }

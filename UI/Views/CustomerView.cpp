@@ -11,16 +11,9 @@
 // #include "../../Entity/Account/SavingAccount.h"   // Dùng để tạo tài khoản mới
 
 // 2. Include các Command
-#include "../../Entity/Command/DepositCmd.h"
-#include "../../Entity/Command/WithdrawCmd.h"
-#include "../../Entity/Command/TransferCmd.h"
-#include "../../Entity/Command/ShowNotificationsCmd.h"
 #include "../../Entity/Command/LogoutCmd.h"
 
 // 3. Include các Transaction
-#include "../../Entity/Transaction/DepositTransaction.h"
-#include "../../Entity/Transaction/WithdrawTransaction.h"
-#include "../../Entity/Transaction/TransferTransaction.h"
 
 #include "../../Business/ParserFactory/ParserFactory.h"
 #include "../../Business/IParsable.h"
@@ -63,7 +56,7 @@ void UI::CustomerView::render()
         cout << "              NGAN HANG N06              \n";
         cout << "=========================================\n";
         cout << "Xin chao: " << name << "\n\n\n";
-        cout << "--------------- MENU --------------------\n\n";
+        cout << "----------------- MENU ------------------\n\n";
         int startY = UI::ConsoleUtils::getWhereY();
         for (const string &option : _menuOptions)
         {
@@ -274,9 +267,10 @@ void UI::CustomerView::showAddAccountPage()
     {
         UI::ConsoleUtils::clearScreen();
         cout << "=========================================\n";
-        cout << "           MO TAI KHOAN MOI              \n";
-        cout << "=========================================\n";
-        cout << "Chon loai tai khoan muon mo:\n\n\n";
+        cout << "              NGAN HANG N06              \n";
+        cout << "=========================================\n\n";
+        cout << "-------------- MO TAI KHOAN -------------\n\n";
+        cout << "Chon loai tai khoan:\n\n";
 
         // In danh sách lựa chọn
         int startY = UI::ConsoleUtils::getWhereY();
@@ -341,12 +335,16 @@ void UI::CustomerView::showAddAccountPage()
 
     UI::ConsoleUtils::clearScreen();
     string accTypeStr = (localIndex == 1) ? "CHECKING ACCOUNT" : "SAVING ACCOUNT";
+    cout << "=========================================\n";
+    cout << "              NGAN HANG N06              \n";
+    cout << "=========================================\n\n";
 
-    cout << "--- TAO " << accTypeStr << " ---\n\n";
+    cout << "---------- TAO " << accTypeStr << " ----------\n\n";
 
     // Nhập Số tài khoản
     cout << "Nhap so tai khoan moi (10 so): ";
     string accNum = Utils::inputNumber(10);
+    cout << "\n";
     // Kiểm tra trùng lặp
     if (_bankSystem->getAccount(accNum) != nullptr)
     {
@@ -358,9 +356,11 @@ void UI::CustomerView::showAddAccountPage()
     // Nhập PIN
     cout << "Nhap ma PIN (6 so): ";
     string pin = Utils::inputNumber(6);
+    cout << "\n";
     // Nhập số dư ban đầu
     cout << "Nhap so du ban dau: ";
     string initBalance = Utils::inputNumber(15);
+    cout << "\n";
     shared_ptr<Account> newAccount = nullptr;
     string ownerUsername = _currentCustomer->username();
     ParserFactory factory;
@@ -396,319 +396,6 @@ void UI::CustomerView::showAddAccountPage()
     cout << "\nNhan phim bat ky de quay lai...";
     _getch();
 }
-
-// void UI::CustomerView::handleDeposit()
-// {
-//     UI::ConsoleUtils::clearScreen();
-//     cout << "--- NAP TIEN ---\n\n";
-
-//     // 1. Nhập tài khoản nguồn (của mình)
-//     auto acc = inputOwnedAccount("Nhap so tai khoan nhan tien: ");
-//     if (!acc)
-//     {
-//         _getch();
-//         return;
-//     }
-
-//     // 2. Nhập số tiền
-//     long long amount;
-//     cout << "Nhap so tien muon nap: ";
-//     cin >> amount;
-
-//     // 3. Tạo Transaction & Command
-//     auto trans = make_shared<DepositTransaction>(acc, amount);
-//     DepositCmd cmd(trans);
-
-//     // 4. Thực thi
-//     cmd.execute();
-
-//     // In kết quả (Transaction tự cập nhật số dư, ta chỉ cần in ra)
-//     cout << "\n[OK] Giao dich hoan tat.\n";
-//     cout << "So du moi: " << acc->balance() << " VND\n";
-
-//     cout << "\nNhan phim bat ky de quay lai...";
-//     _getch();
-// }
-
-// void UI::CustomerView::handleWithdraw()
-// {
-//     UI::ConsoleUtils::clearScreen();
-//     cout << "--- RUT TIEN ---\n\n";
-
-//     auto acc = inputOwnedAccount("Nhap so tai khoan rut tien: ");
-//     if (!acc)
-//     {
-//         _getch();
-//         return;
-//     }
-
-//     long long amount;
-//     cout << "Nhap so tien muon rut: ";
-//     cin >> amount;
-
-//     string pin;
-//     cout << "Nhap ma PIN: ";
-//     cin >> pin;
-
-//     // Tạo Transaction Rút tiền
-//     auto trans = make_shared<WithdrawTransaction>(acc, amount, pin);
-//     WithdrawCmd cmd(trans);
-
-//     // Thực thi (Logic kiểm tra PIN và Số dư nằm trong Transaction::execute)
-//     cout << "\nDang xu ly...\n";
-//     cmd.execute();
-
-//     cout << "\n(Ket thuc giao dich)";
-//     cout << "\nNhan phim bat ky de quay lai...";
-//     _getch();
-// }
-
-// void UI::CustomerView::handleTransfer()
-// {
-//     UI::ConsoleUtils::clearScreen();
-//     cout << "--- CHUYEN KHOAN ---\n\n";
-
-//     // 1. Tài khoản nguồn (Của mình)
-//     auto srcAcc = inputOwnedAccount("TK Nguon (Cua ban): ");
-//     if (!srcAcc)
-//     {
-//         _getch();
-//         return;
-//     }
-
-//     // 2. Tài khoản đích (Của bất kỳ ai trong hệ thống)
-//     string destId;
-//     cout << "TK Nhan (Nguoi khac): ";
-//     cin >> destId;
-
-//     auto bank = AppContext::getInstance().getBankSystem();
-//     auto destAcc = bank->getAccount(destId);
-
-//     if (!destAcc)
-//     {
-//         cout << "\n[!] LOI: Tai khoan nguoi nhan khong ton tai!\n";
-//         _getch();
-//         return;
-//     }
-
-//     // 3. Thông tin giao dịch
-//     long long amount;
-//     cout << "Nhap so tien: ";
-//     cin >> amount;
-
-//     string pin;
-//     cout << "Nhap ma PIN: ";
-//     cin >> pin;
-
-//     // 4. Thực thi
-//     auto trans = make_shared<TransferTransaction>(srcAcc, destAcc, amount, pin);
-//     TransferCmd cmd(trans);
-
-//     cout << "\nDang xu ly...\n";
-//     cmd.execute();
-
-//     cout << "\n(Ket thuc giao dich)";
-//     cout << "\nNhan phim bat ky de quay lai...";
-//     _getch();
-// }
-
-// void UI::CustomerView::showNotificationsPage()
-// {
-//     UI::ConsoleUtils::clearScreen();
-//     cout << "--- HOP THU DEN (NOTIFICATIONS) ---\n\n";
-
-//     auto bank = AppContext::getInstance().getBankSystem();
-//     auto cust = bank->currentCustomer();
-
-//     if (cust)
-//     {
-//         vector<string> accIds = cust->getOwnedAccountIds();
-//         bool hasAnyNotif = false;
-
-//         for (const string &accId : accIds)
-//         {
-//             auto acc = bank->getAccount(accId);
-//             if (acc && !acc->notifications().empty())
-//             {
-//                 hasAnyNotif = true;
-//                 cout << ">> Tai khoan " << accId << ":\n";
-
-//                 // Dùng Command để in thông báo (Tái sử dụng code)
-//                 ShowNotificationsCmd cmd(acc);
-//                 cmd.execute();
-
-//                 cout << "------------------------------------\n";
-//             }
-//         }
-
-//         if (!hasAnyNotif)
-//         {
-//             cout << "Hien tai khong co thong bao nao.\n";
-//         }
-//     }
-
-//     cout << "\nNhan phim bat ky de quay lai...";
-//     _getch();
-// }
-
-// void UI::CustomerView::showAccountDetailPage(std::string accountNumber)
-// {
-//     // Lấy object Account thực
-//     auto account = _bankSystem->getAccount(accountNumber);
-//     if (!account)
-//         return;
-
-//     bool inAccountMenu = true;
-//     while (inAccountMenu)
-//     {
-//         // Cập nhật title với số dư mới nhất
-//         string title = "--- TAI KHOAN: " + accountNumber + " ---\n" + account->info();
-//         int choice = navigateMenu(_accountMenuOptions, title);
-
-//         switch (choice)
-//         {
-//         case 1: // Thong tin
-//             UI::ConsoleUtils::clearScreen();
-//             cout << account->info() << "\nNhan phim bat ky...";
-//             _getch();
-//             break;
-//         case 2: // Thong bao
-//             UI::ConsoleUtils::clearScreen();
-//             // Hiển thị notification từ Account
-//             {
-//                 auto notifs = account->notifications();
-//                 if (notifs.empty())
-//                     cout << "Khong co thong bao.\n";
-//                 else
-//                     for (auto &n : notifs)
-//                         cout << "- " << n << "\n";
-//             }
-//             cout << "\nNhan phim bat ky...";
-//             _getch();
-//             break;
-//         case 3: // Nap tien
-//             showDepositPage(accountNumber);
-//             break;
-//         case 4: // Rut tien
-//             showWithdrawPage(accountNumber);
-//             break;
-//         case 5: // Chuyen tien
-//             UI::ConsoleUtils::clearScreen();
-//             cout << "Chuc nang chuyen tien dang phat trien...\nNhan phim bat ky...";
-//             _getch();
-//             break;
-//         case 6: // Xoa tai khoan
-//             UI::ConsoleUtils::clearScreen();
-//             cout << "----Xoa tai khoan----\n";
-//             cout << "Nhap PIN de xac nhan: ";
-//             {
-//                 string pin;
-//                 std::getline(cin, pin);
-//                 if (account->verifyPIN(pin))
-//                 {
-//                     _currentCustomer->removeAccount(accountNumber);
-//                     _bankSystem->removeAccount(accountNumber);
-//                     cout << "\nDa xoa tai khoan.\nNhan phim bat ky...";
-//                     _getch();
-//                     inAccountMenu = false;
-//                 }
-//                 else
-//                 {
-//                     cout << "\nSai PIN.\nNhan phim bat ky...";
-//                     _getch();
-//                 }
-//             }
-//             break;
-//         case 7: // Quay lai
-//             inAccountMenu = false;
-//             break;
-//         }
-//     }
-// }
-
-// void UI::CustomerView::showDepositPage(std::string accountNumber)
-// {
-//     auto account = _bankSystem->getAccount(accountNumber);
-//     if (!account)
-//         return;
-
-//     bool staying = true;
-//     while (staying)
-//     {
-//         UI::ConsoleUtils::clearScreen();
-//         cout << "---- Nap tien ----\n";
-//         cout << "Tai khoan: " << accountNumber << "\n";
-//         cout << "So du hien tai: " << account->balance() << "\n";
-//         cout << "So tien nap: ";
-
-//         long long amount;
-//         cin >> amount;
-//         cin.ignore();
-
-//         account->deposit(amount);
-//         // Có thể thêm log notification vào account ở đây
-//         account->addNotification("Nap tien: +" + std::to_string(amount));
-
-//         cout << "\nNap thanh cong! So du moi: " << account->balance();
-//         cout << "\nNhan Q de quay lai, phim bat ky de tiep tuc.";
-
-//         char key = _getch();
-//         if (key == 'q' || key == 'Q')
-//             staying = false;
-//     }
-// }
-
-// void UI::CustomerView::showWithdrawPage(std::string accountNumber)
-// {
-//     auto account = _bankSystem->getAccount(accountNumber);
-//     if (!account)
-//         return;
-
-//     bool staying = true;
-//     while (staying)
-//     {
-//         UI::ConsoleUtils::clearScreen();
-//         cout << "---- Rut tien ----\n";
-//         cout << "Tai khoan: " << accountNumber << "\n";
-//         cout << "So du hien tai: " << account->balance() << "\n";
-
-//         long long amount;
-//         cout << "So tien rut: ";
-//         cin >> amount;
-//         cin.ignore();
-
-//         string pin;
-//         cout << "Ma PIN: ";
-//         std::getline(cin, pin);
-
-//         if (account->verifyPIN(pin))
-//         {
-//             if (account->balance() >= amount)
-//             {
-//                 account->withdraw(amount);
-//                 account->addNotification("Rut tien: -" + std::to_string(amount));
-//                 cout << "\nRut tien thanh cong! So du moi: " << account->balance();
-//                 cout << "\nNhan Q de quay lai.";
-//             }
-//             else
-//             {
-//                 cout << "\nSo du khong du!";
-//                 _getch();
-//                 continue;
-//             }
-//         }
-//         else
-//         {
-//             cout << "\nSai ma PIN!";
-//             _getch();
-//             continue;
-//         }
-
-//         char key = _getch();
-//         if (key == 'q' || key == 'Q')
-//             staying = false;
-//     }
-// }
 
 void UI::CustomerView::handleLogout()
 {

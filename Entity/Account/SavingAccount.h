@@ -10,9 +10,10 @@ private:
 
 public:
     SavingAccount(std::string accountNumber, string owner, long long balance, string PIN, double rate);
-    void loadFromFile(std::string numberAccount) override;
+
     void addInterest();
-    std::string info() override; // Override thêm info nếu cần hiển thị lãi suất
+    double interestRate() const;
+    std::string info() override;
 };
 
 #endif

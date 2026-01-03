@@ -4,8 +4,9 @@
 #include <vector>
 
 Notification::Notification(std::shared_ptr<Transaction> transaction)
-    : _transaction(transaction) {
-    
+    : _transaction(transaction)
+{
+
     time_t now = time(0);
     struct tm tstruct;
     char buf[80];
@@ -13,13 +14,6 @@ Notification::Notification(std::shared_ptr<Transaction> transaction)
 
     // Định dạng: %H:%M:%S (Giờ:Phút:Giây), %a (Thứ), %d (Ngày), %m (Tháng), %Y (Năm)
     strftime(buf, sizeof(buf), "%H:%M:%S, %A %d/%m/%Y", &tstruct);
-    
-    this->_time = std::string(buf);
-}
 
-void Notification::displayInfo() {
-    std::cout << "--------- THONG BAO ---------" << std::endl;
-    std::cout << "Thoi gian: " << _time << std::endl;
-    std::cout << "Noi dung : " << message() << std::endl;
-    std::cout << "-----------------------------" << std::endl;
+    this->_time = std::string(buf);
 }

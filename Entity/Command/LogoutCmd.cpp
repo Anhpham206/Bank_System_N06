@@ -4,8 +4,8 @@
 LogoutCmd::LogoutCmd()
 {
 }
-void LogoutCmd::execute()
+bool LogoutCmd::execute()
 {
     AppContext::getInstance().getBankSystem()->logout();
-    return;
+    return true;
 }

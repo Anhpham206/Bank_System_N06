@@ -4,7 +4,7 @@
 class ICommand
 {
 public:
-    virtual void execute() = 0;
+    virtual bool execute() = 0;
 
     virtual ~ICommand() = default;
 };

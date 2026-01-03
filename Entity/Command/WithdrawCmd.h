@@ -14,7 +14,7 @@ private:
 
 public:
     WithdrawCmd(std::shared_ptr<WithdrawTransaction> transaction);
-    void execute() override;
+    bool execute() override;
     ~WithdrawCmd() override = default;
 };
 

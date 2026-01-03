@@ -1,2 +1,0 @@
-SavingAccount
-STK002, user1, 20000000, 1234, 0.05

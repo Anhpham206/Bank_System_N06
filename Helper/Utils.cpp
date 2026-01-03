@@ -49,3 +49,69 @@ string Utils::inputNumber(int size)
     }
     return number;
 }
+
+// Nhập số có độ dài cố định; chỉ cho phép kết thúc khi đã nhập đúng `size` ký tự
+string Utils::inputNumberFixedLength(int size)
+{
+    char num;
+    string number = "";
+    while (true)
+    {
+        num = _getch();
+
+        // Enter chỉ được chấp nhận khi đủ chiều dài
+        if (num == 13)
+        {
+            if ((int)number.length() != size)
+                continue;
+            break;
+        }
+
+        if (num == 8)
+        {
+            if (!number.empty())
+            {
+                number.pop_back();
+                cout << "\b \b";
+            }
+        }
+        else if (num >= '0' && num <= '9' && number.length() < size)
+        {
+            cout << num;
+            number += num;
+        }
+    }
+    return number;
+}
+
+string Utils::inputPassword()
+{
+    char c;
+    string pass = "";
+    while (true)
+    {
+        c = _getch();
+
+        if (c == 13)
+        {
+
+            if (pass.empty())
+                continue;
+            break;
+        }
+        if (c == 8)
+        {
+            if (!pass.empty())
+            {
+                pass.pop_back();
+                cout << "\b \b";
+            }
+        }
+        else
+        {
+            cout << "*";
+            pass += c;
+        }
+    }
+    return pass;
+}

@@ -6,7 +6,8 @@ DisplayInfoCmd::DisplayInfoCmd(std::shared_ptr<Object> object)
 {
     _object = object;
 }
-void DisplayInfoCmd::execute()
+bool DisplayInfoCmd::execute()
 {
     std::cout << _object->info() << "\n";
+    return true;
 }

@@ -7,16 +7,15 @@
 class TransferTransaction : public Transaction
 {
 private:
-    string _PIN;
     shared_ptr<Account> _destAccount;
 
 public:
-    TransferTransaction(std::shared_ptr<Account> sourceAcc, std::shared_ptr<Account> destAcc, long long amount, string PIN);
+    TransferTransaction(std::shared_ptr<Account> sourceAcc, std::shared_ptr<Account> destAcc, long long amount);
 
 public:
     std::string info() override;
-    void execute() override;
-    shared_ptr<Account> destinationAccount();
+    bool execute() override;
+    std::shared_ptr<Account> destAccount() override;
 };
 
 #endif

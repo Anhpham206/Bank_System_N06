@@ -87,33 +87,14 @@ std::string Customer::username()
     return _username;
 }
 
-void Customer::saveToFile()
+std::string Customer::password() const
 {
-    // Đặt tên file theo ID khách hàng, ví dụ: "CUST_001.txt"
-    std::string filename = "CUST_" + _customerId + ".txt";
-    std::ofstream outFile(filename);
+    return _password;
+}
 
-    if (outFile.is_open())
-    {
-        outFile << _customerId << "\n";
-        outFile << _fullName << "\n";
-        outFile << _username << "\n";
-        outFile << _password << "\n";
-        outFile << _phoneNumber << "\n";
-
-        outFile << _ownedAccount.size() << "\n";
-        for (const std::string &accId : _ownedAccount)
-        {
-            outFile << accId << "\n";
-        }
-
-        outFile.close();
-        std::cout << "Khách hàng " << _customerId << " đã được lưu vào file\n";
-    }
-    else
-    {
-        std::cerr << "Lỗi: Không thể lưu khách hàng vào file " << filename << "\n";
-    }
+std::string Customer::phoneNumber() const
+{
+    return _phoneNumber;
 }
 
 std::vector<std::string> Customer::getOwnedAccountIds()

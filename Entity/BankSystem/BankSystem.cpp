@@ -4,11 +4,14 @@
 #include "../../Business/SavingAccountParser/SavingAccountParser.h"
 
 #include "../Account/Account.h"
+#include "../Account/CheckingAccount.h"
+#include "../Account/SavingAccount.h"
 #include "../Customer/Customer.h"
 
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <filesystem>
 
 using std::cout;
 using std::string;
@@ -36,7 +39,19 @@ void BankSystem::addAccount(shared_ptr<Account> account)
 
 void BankSystem::removeAccount(string accountNumber)
 {
-    _accounts.erase(accountNumber);
+    // If account exists, remove reference from owner first
+
+    auto it = _accounts.find(accountNumber);
+
+    _accounts.erase(it);
+
+    // Remove account file from disk
+    std::filesystem::path accFile = std::filesystem::path("Data") / "Accounts" / (accountNumber + ".txt");
+    std::error_code ec;
+    if (std::filesystem::exists(accFile) && !std::filesystem::remove(accFile, ec))
+    {
+        cout << "[!] Khong the xoa file tai khoan: " << ec.message() << "\n";
+    }
 }
 
 void BankSystem::run()
@@ -91,6 +106,10 @@ void BankSystem::run()
         shared_ptr<Account> account = std::dynamic_pointer_cast<Account>(parser->parse(line));
 
         _accounts[account->accountNumber()] = account;
+        while (getline(fin, line))
+        {
+            account->addNotification(line);
+        }
         fin.close();
         delete parser;
     }
@@ -103,7 +122,6 @@ shared_ptr<Customer> BankSystem::currentCustomer()
 
 bool BankSystem::login(string username, string pass)
 {
-    check();
 
     if (_customers.find(username) != _customers.end())
     {
@@ -111,7 +129,6 @@ bool BankSystem::login(string username, string pass)
         if (currCustomer->verifyPassword(pass))
         {
             _currentCustomer = currCustomer;
-            cout << "Đăng nhập thành công!\n";
             return true;
         }
         else
@@ -142,10 +159,91 @@ shared_ptr<Account> BankSystem::getAccount(string accountNumber)
     }
 }
 
-void BankSystem::check()
+shared_ptr<Customer> BankSystem::getCustomer(string username)
 {
-    for (auto i : _customers)
+    if (_customers.find(username) != _customers.end())
     {
-        cout << i.first << "\n";
+        return _customers[username];
     }
+    else
+    {
+        return nullptr;
+    }
+}
+
+void BankSystem::save()
+{
+    // Save customers list
+    std::ofstream fCustomersList("Data/Customers/Customers.txt", std::ios::trunc);
+    if (!fCustomersList)
+    {
+        cout << "Khong the mo file Customers.txt de ghi.\n";
+        return;
+    }
+
+    for (auto &p : _customers)
+    {
+        auto cust = p.second;
+        string filename = cust->getCustomerId();
+
+        fCustomersList << filename << "\n";
+
+        std::ofstream fout("Data/Customers/" + filename + ".txt", std::ios::trunc);
+        if (!fout)
+        {
+            cout << "Khong the mo file customer: " << filename << "\n";
+            continue;
+        }
+
+        fout << cust->getCustomerId() << ", " << cust->getName() << ", " << cust->username() << ", " << cust->password() << ", " << cust->phoneNumber() << "\n";
+
+        for (auto &acctId : cust->getOwnedAccountIds())
+            fout << acctId << "\n";
+        fout.close();
+    }
+    fCustomersList.close();
+
+    // Save accounts list
+    std::ofstream fAccountsList("Data/Accounts/Accounts.txt", std::ios::trunc);
+    if (!fAccountsList)
+    {
+        cout << "Khong the mo file Accounts.txt de ghi.\n";
+        return;
+    }
+
+    for (auto &p : _accounts)
+    {
+        auto acct = p.second;
+        string acctNum = acct->accountNumber();
+        string type = acct->type();
+        fAccountsList << acctNum << "\n";
+
+        std::ofstream fout("Data/Accounts/" + acctNum + ".txt", std::ios::trunc);
+        if (!fout)
+        {
+            cout << "Khong the mo file account: " << acctNum << "\n";
+            continue;
+        }
+
+        if (type == "Checking Account")
+        {
+            auto checking = std::dynamic_pointer_cast<CheckingAccount>(acct);
+            fout << "CheckingAccount\n";
+            fout << checking->accountNumber() << ", " << checking->owner() << ", " << checking->balance() << ", " << checking->pin() << "\n";
+        }
+        else
+        {
+            auto saving = std::dynamic_pointer_cast<SavingAccount>(acct);
+            fout << "SavingAccount\n";
+            fout << saving->accountNumber() << ", " << saving->owner() << ", " << saving->balance() << ", " << saving->pin() << ", " << saving->interestRate() << "\n";
+        }
+
+        // Write notifications if any
+        auto notes = acct->notifications();
+        for (auto &n : notes)
+            fout << n << "\n";
+
+        fout.close();
+    }
+    fAccountsList.close();
 }

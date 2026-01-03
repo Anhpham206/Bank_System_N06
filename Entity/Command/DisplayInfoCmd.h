@@ -13,7 +13,7 @@ private:
 
 public:
     DisplayInfoCmd(std::shared_ptr<Object> object);
-    void execute() override;
+    bool execute() override;
     ~DisplayInfoCmd() override = default;
 };
 

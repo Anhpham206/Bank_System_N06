@@ -1,14 +1,15 @@
 #include "WithdrawTransaction.h"
 #include "../Notification/WithdrawNotification.h"
-#include "../Notification/Notification.h"
+#include "../Command/DisplayInfoCmd.h"
+#include "../Account/Account.h"
+
 #include <iostream>
 #include <sstream>
 #include <format>
 
-WithdrawTransaction::WithdrawTransaction(std::shared_ptr<Account> acc, long long amount, string PIN)
+WithdrawTransaction::WithdrawTransaction(std::shared_ptr<Account> acc, long long amount)
     : Transaction(acc, amount)
 {
-    _PIN = PIN;
 }
 
 std::string WithdrawTransaction::info()
@@ -18,21 +19,26 @@ std::string WithdrawTransaction::info()
     return ss.str();
 }
 
-void WithdrawTransaction::execute()
+bool WithdrawTransaction::execute()
 {
-    if (_srcAccount->verifyPIN(_PIN))
+
+    if (_srcAccount->balance() >= _amount)
     {
-        if (_srcAccount->balance() >= _amount)
-        {
-            _srcAccount->withdraw(_amount);
-        }
-        else
-        {
-            std::cout << "Tai khoan hien khong du de thuc hien giao dich!";
-        }
+        _srcAccount->withdraw(_amount);
+        std::shared_ptr<WithdrawNotification> notification = std::make_shared<WithdrawNotification>(shared_from_this());
+        _srcAccount->addNotification(notification->message());
+        DisplayInfoCmd displayCmd(notification);
+        displayCmd.execute();
+        return true;
     }
     else
     {
-        std::cout << "Sai ma xac nhan!";
+        std::cout << "Tai khoan hien khong du de thuc hien giao dich!";
+        return false;
     }
+}
+
+std::shared_ptr<Account> WithdrawTransaction::destAccount()
+{
+    return nullptr;
 }

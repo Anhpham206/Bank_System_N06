@@ -1,2 +1,0 @@
-CheckingAccount
-STK001, user1, 5000000, 1234

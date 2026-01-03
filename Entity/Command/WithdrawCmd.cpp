@@ -5,8 +5,7 @@ WithdrawCmd::WithdrawCmd(std::shared_ptr<WithdrawTransaction> transaction)
 {
     _transaction = transaction;
 }
-void WithdrawCmd::execute()
+bool WithdrawCmd::execute()
 {
-    _transaction->execute();
-    return;
+    return _transaction->execute();
 }

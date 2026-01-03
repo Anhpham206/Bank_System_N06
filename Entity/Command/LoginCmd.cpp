@@ -6,19 +6,12 @@
 LoginCmd::LoginCmd()
 {
 }
-void LoginCmd::execute()
+LoginCmd::LoginCmd(string username, string password)
+    : _username(username), _password(password)
 {
-    string username;
-    string pass;
+}
+bool LoginCmd::execute()
+{
     auto bankSystem = AppContext::getInstance().getBankSystem();
-    do
-    {
-        std::cout << "Tên đăng nhập: \t";
-
-        std::cin >> username;
-        std::cout << "Mật khẩu: \t";
-
-        std::cin >> pass;
-    } while (!bankSystem->login(username, pass));
-    return;
+    return bankSystem->login(_username, _password);
 }

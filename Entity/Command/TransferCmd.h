@@ -14,7 +14,7 @@ private:
 
 public:
     TransferCmd(std::shared_ptr<TransferTransaction> transaction);
-    void execute() override;
+    bool execute() override;
     ~TransferCmd() override = default;
 };
 
