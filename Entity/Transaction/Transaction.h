@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-#include "../Object.h."
+#include "../Object.h"
 
 class Account;
 
