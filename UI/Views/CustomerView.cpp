@@ -343,7 +343,7 @@ void UI::CustomerView::showAddAccountPage()
 
     // Nhập Số tài khoản
     cout << "Nhap so tai khoan moi (10 so): ";
-    string accNum = Utils::inputNumber(10);
+    string accNum = Utils::inputNumberFixedLength(10);
     cout << "\n";
     // Kiểm tra trùng lặp
     if (_bankSystem->getAccount(accNum) != nullptr)
@@ -355,7 +355,7 @@ void UI::CustomerView::showAddAccountPage()
 
     // Nhập PIN
     cout << "Nhap ma PIN (6 so): ";
-    string pin = Utils::inputNumber(6);
+    string pin = Utils::inputNumberFixedLength(6);
     cout << "\n";
     // Nhập số dư ban đầu
     cout << "Nhap so du ban dau: ";
@@ -404,5 +404,4 @@ void UI::CustomerView::handleLogout()
     _currentCustomer = nullptr;
     LogoutCmd logOut;
     logOut.execute();
-    // Logic thoát sẽ được xử lý bởi biến running = false ở trên
 }
